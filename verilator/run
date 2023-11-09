@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+
+make
+cd ../hardware/src
+../../verilator/obj_dir/sim_sdl.exe

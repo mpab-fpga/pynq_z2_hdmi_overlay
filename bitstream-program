@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+cd ./hardware || exit
+start=$(date +%s)
+vivado -mode batch -source bitstream-program.tcl
+end=$(date +%s)
+elapsed=$((end-start))
+
+echo "============================================="
+echo "$0 took $elapsed seconds"
+echo "---------------------------------------------"

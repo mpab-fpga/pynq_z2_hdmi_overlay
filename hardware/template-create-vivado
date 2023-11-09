@@ -1,0 +1,47 @@
+#!/usr/bin/env sh
+
+copy_manifest_if () {
+echo "INFO: using manifest file: $1"
+if [ -f "$1" ]; then
+	while read -r LINE || [ -n "$LINE" ]; do
+		[[ $LINE = \#* ]]  && continue
+		[ "$LINE" = "" ]  && continue
+		if [ -f "$2/$LINE" ]; then
+			cp "$2/$LINE" "$3"
+			echo "INFO: $LINE" copied
+		else
+			echo "ERROR: bad manifest - file $2/$LINE not found"
+		fi
+	done < "$1"
+else
+	echo "WARNING: manifest file $1 not found"
+fi
+}
+
+copy_manifest_if "./src/manifest" "./libs/." ./src/.
+copy_manifest_if "../verilator/manifest" "./libs/verilator/." ../verilator/.
+
+TEMPLATE_NAME="$0.tcl"
+[ ! -f "$TEMPLATE_NAME" ] && echo "$TEMPLATE_NAME not found" && exit
+TARGET_NAME=${TEMPLATE_NAME//template-/}
+
+CHECK_FILES=''
+GET_FILES=''
+cd ./src || exit
+while read -r FILE; do
+	ns='        "[file normalize "$origin_dir/src/'$FILE'"]"\\'
+	CHECK_FILES=$CHECK_FILES$ns$'\n'
+	ns='    [file normalize "${origin_dir}/src/'"$FILE"'"] \\'
+	GET_FILES=$GET_FILES$ns$'\n'
+done < <(find . -maxdepth 1 -name "*.v" -o -name "*.sv" -o -name "*.mem" -type f)
+ns='        "[file normalize "$origin_dir/constraints/constraints.xdc"]"\\'
+CHECK_FILES=$CHECK_FILES$ns
+
+cd ..
+cat "$TEMPLATE_NAME" \
+| awk -v r="$CHECK_FILES" '{gsub(/@@CHECK_REQUIRED_FILES@@/,r)}1' \
+| awk -v r="$GET_FILES" '{gsub(/@@GET_REQUIRED_FILES@@/,r)}1' \
+> "./$TARGET_NAME"
+# NB: b0rkened on macos
+
+echo "vivado template: $TEMPLATE_NAME => $TARGET_NAME"

@@ -1,0 +1,21 @@
+# comments and blank lines are permitted
+
+# video building blocks
+# video/VIDEO_source.sv
+video/HDMI_encoder.sv
+video/TMDS_encoder.sv
+video/VIDEO_sig_gen.sv
+video/VIDEO_sync.sv
+
+# rasterbars
+demos/demo_rasterbars.sv
+demos/rasterbar.sv
+demos/render_rasterbars.sv
+memory/rom_async.sv
+maths/res/sine_table_64x8.mem
+maths/sine_table.sv
+
+# starfield
+demos/demo_stars.sv
+demos/starfield.sv
+maths/lfsr.sv
