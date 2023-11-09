@@ -4,14 +4,14 @@ module demo_rasterbars #(
     COORDSPC = 16,  // coordinate space (bits)
     COLSPC   = 10   // color space (bits)
 ) (
-    input logic video_clk_pix,
-    input logic video_enable,
-    input logic vsync,
-    input logic hsync,
-    input logic frame_start,
-    input logic line_start,
-    input logic signed [COORDSPC-1:0] sx,
-    input logic signed [COORDSPC-1:0] sy,
+    input wire video_clk_pix,
+    input wire video_enable,
+    input wire vsync,
+    input wire hsync,
+    input wire frame_start,
+    input wire line_start,
+    input wire signed [COORDSPC-1:0] sx,
+    input wire signed [COORDSPC-1:0] sy,
     output logic [COLSPC-1:0] red,
     output logic [COLSPC-1:0] green,
     output logic [COLSPC-1:0] blue

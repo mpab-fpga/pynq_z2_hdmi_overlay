@@ -19,3 +19,10 @@ maths/sine_table.sv
 demos/demo_stars.sv
 demos/starfield.sv
 maths/lfsr.sv
+
+# text
+demos/demo_greet.sv
+demos/sprite.sv
+demos/res/greet.mem
+demos/res/font_unscii_8x8_latin_uc.mem
+memory/rom_sync.sv

@@ -3,9 +3,11 @@
 ## Todo
 
 - stretch goal: add scrolling text
+- stretch goal: change resolution
 
 ## Done
 
+- stretch goal: add text
 - implement overlays
 - add starfield
 - add raster bars

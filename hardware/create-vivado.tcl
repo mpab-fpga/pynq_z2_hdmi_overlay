@@ -34,15 +34,20 @@
 proc checkRequiredFiles { origin_dir} {
     set status true
     set files [list \
+        "[file normalize "$origin_dir/src/./demo_greet.sv"]"\
         "[file normalize "$origin_dir/src/./demo_rasterbars.sv"]"\
         "[file normalize "$origin_dir/src/./demo_stars.sv"]"\
+        "[file normalize "$origin_dir/src/./font_unscii_8x8_latin_uc.mem"]"\
+        "[file normalize "$origin_dir/src/./greet.mem"]"\
         "[file normalize "$origin_dir/src/./HDMI_encoder.sv"]"\
         "[file normalize "$origin_dir/src/./lfsr.sv"]"\
         "[file normalize "$origin_dir/src/./rasterbar.sv"]"\
         "[file normalize "$origin_dir/src/./render_rasterbars.sv"]"\
         "[file normalize "$origin_dir/src/./rom_async.sv"]"\
+        "[file normalize "$origin_dir/src/./rom_sync.sv"]"\
         "[file normalize "$origin_dir/src/./sine_table.sv"]"\
         "[file normalize "$origin_dir/src/./sine_table_64x8.mem"]"\
+        "[file normalize "$origin_dir/src/./sprite.sv"]"\
         "[file normalize "$origin_dir/src/./starfield.sv"]"\
         "[file normalize "$origin_dir/src/./TMDS_encoder.sv"]"\
         "[file normalize "$origin_dir/src/./top_HDMI.sv"]"\
@@ -171,15 +176,20 @@ if {[string equal [get_filesets -quiet sources_1] ""]} {
 # Set 'sources_1' fileset object
 set obj [get_filesets sources_1]
 set files [list \
+    [file normalize "${origin_dir}/src/./demo_greet.sv"] \
     [file normalize "${origin_dir}/src/./demo_rasterbars.sv"] \
     [file normalize "${origin_dir}/src/./demo_stars.sv"] \
+    [file normalize "${origin_dir}/src/./font_unscii_8x8_latin_uc.mem"] \
+    [file normalize "${origin_dir}/src/./greet.mem"] \
     [file normalize "${origin_dir}/src/./HDMI_encoder.sv"] \
     [file normalize "${origin_dir}/src/./lfsr.sv"] \
     [file normalize "${origin_dir}/src/./rasterbar.sv"] \
     [file normalize "${origin_dir}/src/./render_rasterbars.sv"] \
     [file normalize "${origin_dir}/src/./rom_async.sv"] \
+    [file normalize "${origin_dir}/src/./rom_sync.sv"] \
     [file normalize "${origin_dir}/src/./sine_table.sv"] \
     [file normalize "${origin_dir}/src/./sine_table_64x8.mem"] \
+    [file normalize "${origin_dir}/src/./sprite.sv"] \
     [file normalize "${origin_dir}/src/./starfield.sv"] \
     [file normalize "${origin_dir}/src/./TMDS_encoder.sv"] \
     [file normalize "${origin_dir}/src/./top_HDMI.sv"] \
