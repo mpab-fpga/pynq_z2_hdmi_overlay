@@ -39,6 +39,9 @@ _ide/
 .analytics
 RemoteSystemsTempFiles/
 
+# verilator
+obj_dir
+
 # Eclipse
 
 # CDT-specific (C/C++ Development Tooling)
