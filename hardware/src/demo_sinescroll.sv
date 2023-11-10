@@ -37,7 +37,7 @@ module demo_sinescroll #(
   localparam CHANW = 4;  // colour channel width (bits)
   localparam COLRW = 3 * CHANW;  // colour width: three channels (bits)
   localparam CIDXW = 4;  // colour index width (bits)
-  localparam PAL_FILE = "sweetie16_4b.mem";  // palette file
+  localparam PAL_FILE = "sweetie16_4b_0.mem";  // palette file, index 0 is transparent
 
   // framebuffer (FB)
   localparam FB_WIDTH = 320;  // framebuffer width in pixels

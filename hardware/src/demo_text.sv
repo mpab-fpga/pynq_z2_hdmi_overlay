@@ -107,42 +107,44 @@ module demo_text #(
     spr_start = (sy < LINE2) ? (line_start && sy == spr_y[0]) : (line_start && sy == spr_y[1]);
   end
 
-  integer i;  // for looping over sprite signals
-
+  
+  integer i1;
   // greeting ROM address
   logic [$clog2(G_ROM_DEPTH)-1:0] msg_start;
   always_comb begin
     greet_rom_addr = 0;
     msg_start = greeting * GREET_LENGTH;  // calculate start of message
-    for (i = 0; i < SPR_CNT; i = i + 1) begin
+    for (i1 = 0; i1 < SPR_CNT; i1 = i1 + 1) begin
       /* verilator lint_off WIDTH */
-      if (sx == SPR_DMA + i)
-        greet_rom_addr = (sy < LINE2) ? (msg_start + i) : (msg_start + i + GREET_LENGTH / 2);
+      if (sx == SPR_DMA + i1)
+        greet_rom_addr = (sy < LINE2) ? (msg_start + i1) : (msg_start + i1 + GREET_LENGTH / 2);
       /* verilator lint_on WIDTH */
     end
   end
 
+  integer i2;
   // load code point from greeting ROM
   logic [G_ROM_WIDTH-1:0] spr_cp[SPR_CNT];
   always_ff @(posedge video_clk_pix) begin
-    for (i = 0; i < SPR_CNT; i = i + 1) begin
+    for (i2 = 0; i2 < SPR_CNT; i2 = i2 + 1) begin
       /* verilator lint_off WIDTH */
-      if (sx == SPR_DMA + i + 1) spr_cp[i] <= greet_rom_data;  // wait 1
+      if (sx == SPR_DMA + i2 + 1) spr_cp[i2] <= greet_rom_data;  // wait 1
       /* verilator lint_on WIDTH */
     end
   end
 
+  integer i3;
   // font ROM address
   logic [$clog2(F_ROM_DEPTH)-1:0] spr_glyph_addr[SPR_CNT];
   logic [$clog2(FONT_HEIGHT)-1:0] spr_glyph_line[SPR_CNT];
   logic [SPR_CNT-1:0] spr_fdma;  // font ROM DMA slots
   always_comb begin
     font_rom_addr = 0;
-    for (i = 0; i < SPR_CNT; i = i + 1) begin
+    for (i3 = 0; i3 < SPR_CNT; i3 = i3 + 1) begin
       /* verilator lint_off WIDTH */
-      spr_fdma[i] = (sx == SPR_DMA + i + 2);  // wait 2
-      spr_glyph_addr[i] = (spr_cp[i] - CP_START) * FONT_HEIGHT;
-      if (spr_fdma[i]) font_rom_addr = spr_glyph_addr[i] + spr_glyph_line[i];
+      spr_fdma[i3] = (sx == SPR_DMA + i3 + 2);  // wait 2
+      spr_glyph_addr[i3] = (spr_cp[i3] - CP_START) * FONT_HEIGHT;
+      if (spr_fdma[i3]) font_rom_addr = spr_glyph_addr[i3] + spr_glyph_line[i3];
       /* verilator lint_on WIDTH */
     end
   end

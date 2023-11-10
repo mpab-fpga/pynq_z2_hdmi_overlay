@@ -2,11 +2,11 @@
 
 ## Todo
 
-- stretch goal: add scrolling text
 - stretch goal: change resolution
 
 ## Done
 
+- stretch goal: add *transparent* scrolling text
 - stretch goal: add text
 - implement overlays
 - add starfield

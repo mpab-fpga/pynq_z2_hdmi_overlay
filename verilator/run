@@ -2,4 +2,5 @@
 
 make
 cd ../hardware/src
-../../verilator/obj_dir/sim_sdl.exe
+[ -f ../../verilator/obj_dir/sim_sdl ] && ../../verilator/obj_dir/sim_sdl && exit
+[ -f ../../verilator/obj_dir/sim_sdl.exe ] && ../../verilator/obj_dir/sim_sdl.exe && exit
