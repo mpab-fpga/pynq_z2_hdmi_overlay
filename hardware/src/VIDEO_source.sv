@@ -33,15 +33,27 @@ module VIDEO_source #(
   );
 
   logic [COLSPC-1:0] l3_red, l3_green, l3_blue;
-  demo_greet greet (
+  demo_text text (
       .red  (l3_red),
       .green(l3_green),
       .blue (l3_blue),
       .*
   );
 
+  logic [COLSPC-1:0] l4_red, l4_green, l4_blue;
+  demo_sinescroll sinescroll (
+      .red  (l4_red),
+      .green(l4_green),
+      .blue (l4_blue),
+      .*
+  );
+
   always_ff @(posedge video_clk_pix) begin
-    if (l3_red != 0 || l3_green != 0 || l3_green != 0) begin
+    if (l4_red != 0 || l4_green != 0 || l4_blue != 0) begin
+      red   <= l4_red;
+      green <= l4_green;
+      blue  <= l4_blue;
+    end else if (l3_red != 0 || l3_green != 0 || l3_blue != 0) begin
       red   <= l3_red;
       green <= l3_green;
       blue  <= l3_blue;

@@ -7,6 +7,11 @@ video/TMDS_encoder.sv
 video/VIDEO_sig_gen.sv
 video/VIDEO_sync.sv
 
+# starfield
+demos/demo_stars.sv
+demos/starfield.sv
+maths/lfsr.sv
+
 # rasterbars
 demos/demo_rasterbars.sv
 demos/rasterbar.sv
@@ -15,14 +20,23 @@ memory/rom_async.sv
 maths/res/sine_table_64x8.mem
 maths/sine_table.sv
 
-# starfield
-demos/demo_stars.sv
-demos/starfield.sv
-maths/lfsr.sv
-
 # text
-demos/demo_greet.sv
+demos/demo_text.sv
 demos/sprite.sv
-demos/res/greet.mem
+demos/res/text_greet.mem
 demos/res/font_unscii_8x8_latin_uc.mem
 memory/rom_sync.sv
+
+# sine scroll
+demos/demo_sinescroll.sv
+demos/render_sinescroll.sv
+demos/res/outline-font-32x32.mem
+demos/res/sinescroll_greet.mem
+memory/bram_sdp.sv
+clock/xd.sv
+display/bitmap_addr.sv
+display/clut_simple.sv
+display/linebuffer_simple.sv
+graphics/draw_char.sv
+graphics/get_glyph_line.sv
+res/palettes/sweetie16_4b.mem

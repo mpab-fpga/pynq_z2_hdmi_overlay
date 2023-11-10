@@ -18,6 +18,12 @@ module sim #(
     output logic [COLSPC-1:0] green,
     output logic [COLSPC-1:0] blue
 );
+  // aliases
+  logic sysclk;
+  always_comb begin
+    sysclk = video_clk_pix;
+  end
+
   VIDEO_sync sync(.*);
   VIDEO_source source (.*);
 endmodule

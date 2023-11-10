@@ -4,7 +4,7 @@
 
 `default_nettype none `timescale 1ns / 1ps
 
-module demo_greet #(
+module demo_text #(
     COORDSPC = 16,  // coordinate space (bits)
     COLSPC   = 10   // color space (bits)
 ) (
@@ -26,7 +26,7 @@ module demo_greet #(
   localparam GREET_LENGTH = 16;  // each containing 16 code points
   localparam G_ROM_WIDTH = $clog2('h5F);  // highest code point is U+005F
   localparam G_ROM_DEPTH = GREET_MSGS * GREET_LENGTH;
-  localparam GREET_FILE = "greet.mem";
+  localparam GREET_FILE = "text_greet.mem";
 
   logic [$clog2(G_ROM_DEPTH)-1:0] greet_rom_addr;
   logic [G_ROM_WIDTH-1:0] greet_rom_data;  // code point
