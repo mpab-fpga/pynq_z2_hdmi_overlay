@@ -16,55 +16,55 @@ module VIDEO_source #(
     output logic [COLSPC-1:0] green,
     output logic [COLSPC-1:0] blue
 );
-  logic [COLSPC-1:0] l1_red, l1_green, l1_blue;
+  logic [COLSPC-1:0] st_red, st_green, st_blue;
   demo_stars stars (
-      .red  (l1_red),
-      .green(l1_green),
-      .blue (l1_blue),
+      .red  (st_red),
+      .green(st_green),
+      .blue (st_blue),
       .*
   );
 
-  logic [COLSPC-1:0] l2_red, l2_green, l2_blue;
+  logic [COLSPC-1:0] rb_red, rb_green, rb_blue;
   demo_rasterbars bars (
-      .red  (l2_red),
-      .green(l2_green),
-      .blue (l2_blue),
+      .red  (rb_red),
+      .green(rb_green),
+      .blue (rb_blue),
       .*
   );
 
-  logic [COLSPC-1:0] l3_red, l3_green, l3_blue;
+  logic [COLSPC-1:0] te_red, te_green, te_blue;
   demo_text text (
-      .red  (l3_red),
-      .green(l3_green),
-      .blue (l3_blue),
+      .red  (te_red),
+      .green(te_green),
+      .blue (te_blue),
       .*
   );
 
-  logic [COLSPC-1:0] l4_red, l4_green, l4_blue;
+  logic [COLSPC-1:0] ss_red, ss_green, ss_blue;
   demo_sinescroll sinescroll (
-      .red  (l4_red),
-      .green(l4_green),
-      .blue (l4_blue),
+      .red  (ss_red),
+      .green(ss_green),
+      .blue (ss_blue),
       .*
   );
 
   always_ff @(posedge video_clk_pix) begin
-    if (l4_red != 0 || l4_green != 0 || l4_blue != 0) begin
-      red   <= l4_red;
-      green <= l4_green;
-      blue  <= l4_blue;
-    end else if (l3_red != 0 || l3_green != 0 || l3_blue != 0) begin
-      red   <= l3_red;
-      green <= l3_green;
-      blue  <= l3_blue;
-    end else if (l2_red != 0 || l2_green != 0 || l2_blue != 0) begin
-      red   <= l2_red;
-      green <= l2_green;
-      blue  <= l2_blue;
+    if (te_red != 0 || te_green != 0 || te_blue != 0) begin
+      red   <= te_red;
+      green <= te_green;
+      blue  <= te_blue;
+    end else if (ss_red != 0 || ss_green != 0 || ss_blue != 0) begin
+      red   <= ss_red;
+      green <= ss_green;
+      blue  <= ss_blue;
+    end else if (rb_red != 0 || rb_green != 0 || rb_blue != 0) begin
+      red   <= rb_red;
+      green <= rb_green;
+      blue  <= rb_blue;
     end else begin
-      red   <= l1_red;
-      green <= l1_green;
-      blue  <= l1_blue;
+      red   <= st_red;
+      green <= st_green;
+      blue  <= st_blue;
     end
   end
 
