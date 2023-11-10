@@ -24,13 +24,13 @@ maths/sine_table.sv
 demos/demo_text.sv
 demos/sprite.sv
 demos/res/text_greet.mem
-demos/res/font_unscii_8x8_latin_uc.mem
+res/fonts/font_unscii_8x8_latin_uc.mem
 memory/rom_sync.sv
 
 # sine scroll
 demos/demo_sinescroll.sv
 demos/render_sinescroll.sv
-demos/res/outline-font-32x32.mem
+res/fonts/outline-font-32x32.mem
 demos/res/sinescroll_greet.mem
 memory/bram_sdp.sv
 clock/xd.sv
@@ -39,4 +39,4 @@ display/clut_simple.sv
 display/linebuffer_simple.sv
 graphics/draw_char.sv
 graphics/get_glyph_line.sv
-res/palettes/sweetie16_4b.mem
+res/palettes/sweetie16_4b_0.mem

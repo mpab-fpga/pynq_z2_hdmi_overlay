@@ -36,7 +36,7 @@
 # generates assets in the Vitis workspace (firmware) directory
 # must be run in ./firmware/
 
-set PROJECT_NAME hdmi-overlay
+set PROJECT_NAME hdmi_overlay
 set BOARD "pynq_z2"
 
 set PLATFORM ${BOARD}_pfm

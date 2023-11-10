@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+
+start=$(date +%s)
+cd vitis || exit
+xsct.bat ../build-vitis.tcl
+end=$(date +%s)
+elapsed=$((end-start))
+
+echo "============================================="
+echo "build firmware project took $elapsed seconds"
+echo "============================================="

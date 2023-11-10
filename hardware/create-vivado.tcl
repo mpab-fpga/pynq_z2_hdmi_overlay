@@ -58,7 +58,7 @@ proc checkRequiredFiles { origin_dir} {
         "[file normalize "$origin_dir/src/./sine_table_64x8.mem"]"\
         "[file normalize "$origin_dir/src/./sprite.sv"]"\
         "[file normalize "$origin_dir/src/./starfield.sv"]"\
-        "[file normalize "$origin_dir/src/./sweetie16_4b.mem"]"\
+        "[file normalize "$origin_dir/src/./sweetie16_4b_0.mem"]"\
         "[file normalize "$origin_dir/src/./text_greet.mem"]"\
         "[file normalize "$origin_dir/src/./TMDS_encoder.sv"]"\
         "[file normalize "$origin_dir/src/./top_HDMI.sv"]"\
@@ -212,7 +212,7 @@ set files [list \
     [file normalize "${origin_dir}/src/./sine_table_64x8.mem"] \
     [file normalize "${origin_dir}/src/./sprite.sv"] \
     [file normalize "${origin_dir}/src/./starfield.sv"] \
-    [file normalize "${origin_dir}/src/./sweetie16_4b.mem"] \
+    [file normalize "${origin_dir}/src/./sweetie16_4b_0.mem"] \
     [file normalize "${origin_dir}/src/./text_greet.mem"] \
     [file normalize "${origin_dir}/src/./TMDS_encoder.sv"] \
     [file normalize "${origin_dir}/src/./top_HDMI.sv"] \

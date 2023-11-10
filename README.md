@@ -1,4 +1,4 @@
-# PYNQ-Z2 FPGA and firmware HDMI demo project
+# PYNQ-Z2 FPGA and firmware project
 
 Built using the Xilinx toolchain/toolsuite.  
 Should also be portable to other ZYNQ XC7Z020 compatible boards.
@@ -6,7 +6,7 @@ Should also be portable to other ZYNQ XC7Z020 compatible boards.
 ## Purpose
 
 What does it do?  
-creates a starfield and raster bar 'playfield' and overlays the raster bars on the starfield
+lorem ipsum...
 
 Start by reading the project [documentation](./docs/docs.md)
 
@@ -14,5 +14,3 @@ Start by reading the project [documentation](./docs/docs.md)
 git clone...
 ./create
 ```
-
-<img src="./docs/screenshot.png" />

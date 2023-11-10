@@ -36,7 +36,7 @@
 # generates assets in the Vitis workspace (firmware) directory
 # must be run in ./firmware/
 
-set PROJECT_NAME hdmi-overlay
+set PROJECT_NAME hdmi_overlay
 set BOARD "pynq_z2"
 
 set PLATFORM ${BOARD}_pfm
@@ -102,7 +102,7 @@ platform generate
 # {
 #     [bootloader]$VIV_PROJ_DIR/pynq_z2_pfm/export/pynq_z2_pfm/sw/pynq_z2_pfm/boot/fsbl.elf
 #     ${PROJECT_ROOT}/hardware/vivado/vivado.runs/impl_1/design_1_wrapper.bit
-#     $VIV_PROJ_DIR/hdmi-overlay_app/Debug/$APP.elf
+#     $VIV_PROJ_DIR/hdmi_overlay_app/Debug/$APP.elf
 # }"
 
 set VIT_PROJ_DIR [pwd]
@@ -113,7 +113,7 @@ set PROJECT_ROOT [file dirname [file dirname $VIT_PROJ_DIR]]
 
 set BOOTLOADER "    \[bootloader\]${VIT_PROJ_DIR}/pynq_z2_pfm/export/pynq_z2_pfm/sw/pynq_z2_pfm/boot/fsbl.elf"
 set BITSTREAM "    ${PROJECT_ROOT}/hardware/vivado/vivado.runs/impl_1/design_1_wrapper.bit"
-set ELF "    ${VIT_PROJ_DIR}/hdmi-overlay_app/Debug/${APP}.elf"
+set ELF "    ${VIT_PROJ_DIR}/hdmi_overlay_app/Debug/${APP}.elf"
 
 set BIF_DIR $VIT_PROJ_DIR/${SYS}/_ide/bootimage
 set BIF_FILEPATH $BIF_DIR/${SYS}.bif

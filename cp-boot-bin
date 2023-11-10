@@ -1,3 +1,3 @@
 #!/usr/bin/env sh
-cd ./vitis || exit
+cd ./firmware || exit
 $0
