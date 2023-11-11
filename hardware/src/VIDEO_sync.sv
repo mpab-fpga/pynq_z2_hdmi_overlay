@@ -13,7 +13,7 @@ module VIDEO_sync #(
     H_POL    = 0,    // horizontal sync polarity (0:neg, 1:pos)
     V_POL    = 0     // vertical sync polarity (0:neg, 1:pos)
 ) (
-    input logic video_clk_pix,
+    input wire video_clk_pix,
     output logic video_enable,
     output logic vsync,
     output logic hsync,

@@ -7,15 +7,15 @@
 module HDMI_encoder #(
     COLSPC = 10  // color space (bits)
 ) (
-    input logic video_clk_pix,
-    input logic video_clk_tmds,
-    input logic video_enable,
-    input logic vsync,
-    input logic hsync,
+    input wire video_clk_pix,
+    input wire video_clk_tmds,
+    input wire video_enable,
+    input wire vsync,
+    input wire hsync,
 
-    input logic [COLSPC-1:0] red,
-    input logic [COLSPC-1:0] green,
-    input logic [COLSPC-1:0] blue,
+    input wire [COLSPC-1:0] red,
+    input wire [COLSPC-1:0] green,
+    input wire [COLSPC-1:0] blue,
 
     // external (board) connections
     output logic [2:0] hdmi_tx_d_p,

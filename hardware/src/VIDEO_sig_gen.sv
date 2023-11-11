@@ -5,7 +5,7 @@ module VIDEO_sig_gen #(
     VRES = 480,
     COORDSPC = 16  // coordinate space (bits)
 ) (
-    input logic sysclk,  // 125MHz
+    input wire sysclk,  // 125MHz
     output logic video_clk_pix,
     output logic video_clk_tmds,
     output logic video_enable,
@@ -16,7 +16,7 @@ module VIDEO_sig_gen #(
     output logic signed [COORDSPC-1:0] sx,
     output logic signed [COORDSPC-1:0] sy
 );
-  VIDEO_sync video_sync(.*);
+  VIDEO_sync video_sync (.*);
 
   ////////////////////////////////////////////////////////////////////////
   // sysclk divider 125 MHz to 25 MHz clk_pix, and multiplier 125 MHz to 250 MHz
@@ -24,6 +24,8 @@ module VIDEO_sig_gen #(
   logic DCM_TMDS_CLKFX;
   logic clkfb_in, clkfb_out;
 
+  logic CLKOUT0, CLKOUT0B, CLKOUT1B, CLKOUT2B, CLKOUT3, CLKOUT3B;
+  logic CLKOUT4, CLKOUT5, CLKOUT6, CLKFBOUTB, LOCKED, PWRDWN;
   // MMCME2_BASE: Base Mixed Mode Clock Manager
   //              Artix-7
   // Xilinx HDL Language Template, version 2020.1

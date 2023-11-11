@@ -1,4 +1,4 @@
-set bitstream_filepath [file normalize "./vivado/vivado.runs/impl_1/design_1_wrapper.bit"]
+set bitstream_filepath [file normalize "./vivado.runs/impl_1/design_1_wrapper.bit"]
 
 open_hw_manager
 connect_hw_server

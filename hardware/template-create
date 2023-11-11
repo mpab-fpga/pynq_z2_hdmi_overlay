@@ -22,13 +22,9 @@ fi
 copy_manifest_if "./src/manifest" "./libs/." ./src/.
 copy_manifest_if "../verilator/manifest" "./libs/verilator/." ../verilator/.
 
-TEMPLATE_NAME="$0.tcl"
-[ ! -f "$TEMPLATE_NAME" ] && echo "$TEMPLATE_NAME not found" && exit
-TARGET_NAME=${TEMPLATE_NAME//template-/}
-
+cd ./src || exit
 CHECK_FILES=''
 GET_FILES=''
-cd ./src || exit
 while read -r FILE; do
 	ns='        "[file normalize "$origin_dir/src/'$FILE'"]"\\'
 	CHECK_FILES=$CHECK_FILES$ns$'\n'
@@ -38,11 +34,35 @@ done < <(find . -maxdepth 1 -name "*.v" -o -name "*.sv" -o -name "*.mem" -type f
 ns='        "[file normalize "$origin_dir/constraints/constraints.xdc"]"\\'
 CHECK_FILES=$CHECK_FILES$ns
 
+READ_HDL=''
+while read -r FILE; do
+	ns='read_verilog -sv [file normalize "${src_dir}/'$FILE'"]'
+	READ_HDL=$READ_HDL$ns$'\n'
+done < <(find . -maxdepth 1 -name "*.v" -o -name "*.sv" -type f)
+
+READ_MEM=''
+while read -r FILE; do
+	ns='read_mem [file normalize "${src_dir}/'$FILE'"]'
+	READ_MEM=$READ_MEM$ns$'\n'
+done < <(find . -maxdepth 1 -name "*.mem" -type f)
 cd ..
+
+TEMPLATE_NAME="$0-vivado.tcl"
+[ ! -f "$TEMPLATE_NAME" ] && echo "$TEMPLATE_NAME not found" && exit
+TARGET_NAME=${TEMPLATE_NAME//template-/}
+
+# NB: awk b0rkened on macos
 cat "$TEMPLATE_NAME" \
 | awk -v r="$CHECK_FILES" '{gsub(/@@CHECK_REQUIRED_FILES@@/,r)}1' \
 | awk -v r="$GET_FILES" '{gsub(/@@GET_REQUIRED_FILES@@/,r)}1' \
-> "./$TARGET_NAME"
-# NB: b0rkened on macos
-
+> "$TARGET_NAME"
 echo "vivado template: $TEMPLATE_NAME => $TARGET_NAME"
+
+TEMPLATE_NAME="$0-bitstream.tcl"
+[ ! -f "$TEMPLATE_NAME" ] && echo "$TEMPLATE_NAME not found" && exit
+TARGET_NAME=${TEMPLATE_NAME//template-/}
+cat "$TEMPLATE_NAME" \
+| awk -v r="$READ_HDL" '{gsub(/#@@READ_HDL@@/,r)}1' \
+| awk -v r="$READ_MEM" '{gsub(/#@@READ_MEM@@/,r)}1' \
+> "$TARGET_NAME"
+echo "bitstream template: $TEMPLATE_NAME => $TARGET_NAME"

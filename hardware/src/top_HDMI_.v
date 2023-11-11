@@ -2,11 +2,11 @@
 
 module top_HDMI_ #(
 ) (
-    input sysclk,  // 125MHz
-    output [2:0] hdmi_tx_d_p,
-    output [2:0] hdmi_tx_d_n,
-    output hdmi_tx_clk_p,
-    output hdmi_tx_clk_n
+    input wire sysclk,  // 125MHz
+    output wire [2:0] hdmi_tx_d_p,
+    output wire [2:0] hdmi_tx_d_n,
+    output wire hdmi_tx_clk_p,
+    output wire hdmi_tx_clk_n
 );
   top_HDMI hdmi (
   .sysclk(sysclk),

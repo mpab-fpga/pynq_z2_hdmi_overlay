@@ -1,6 +1,8 @@
 #!/usr/bin/env sh
+mkdir -p ./vivado/vivado.runs/impl_1/
+cd ./vivado || exit
 start=$(date +%s)
-vivado -mode batch -nojournal -notrace -source ./bitstream-create.tcl | tee "../$0.log" | grep -E 'ERROR:|WARNING:|Command:|bitstream'
+vivado -mode batch -nojournal -notrace -source ../$0.tcl | grep -E 'ERROR:|WARNING:|INFO:'
 end=$(date +%s)
 elapsed=$((end-start))
 
