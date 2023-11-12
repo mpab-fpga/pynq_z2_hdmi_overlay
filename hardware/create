@@ -1,20 +1,12 @@
 #!/usr/bin/env sh
 
 [ -d "./vivado" ] && echo "directory vivado already exists - skipping hardware project creation" && exit
+mkdir -p ./vivado # for log file
 
 start=$(date +%s)
-
-rm -rf ./*.log
-
-vivado -mode batch -nojournal -notrace -source ./create-vivado.tcl | grep -E 'ERROR:|WARNING:'
-
-# these are generated as side-effects
+vivado -mode batch -nojournal -notrace -source ./create-vivado.tcl -log ./vivado/vivado.log | grep -E 'ERROR:|WARNING:|INFO:'
 rm -rf .Xil
 rm -rf NA
-
-cd vivado || exit
-vivado -mode batch -nojournal -notrace -source ../add-modules.tcl | grep -E 'ERROR:|WARNING:'
-
 end=$(date +%s)
 elapsed=$((end-start))
 

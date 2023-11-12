@@ -11,7 +11,7 @@ if [ -f "$1" ]; then
 			cp "$2/$LINE" "$3"
 			echo "INFO: $LINE" copied
 		else
-			echo "ERROR: bad manifest - file $2/$LINE not found"
+			echo "ERROR: bad manifest - $2/$LINE not found"
 		fi
 	done < "$1"
 else
@@ -26,12 +26,12 @@ cd ./src || exit
 CHECK_FILES=''
 GET_FILES=''
 while read -r FILE; do
-	ns='        "[file normalize "$origin_dir/src/'$FILE'"]"\\'
+	ns='    "[file normalize "$origin_dir/src/'$FILE'"]"\\'
 	CHECK_FILES=$CHECK_FILES$ns$'\n'
-	ns='    [file normalize "${origin_dir}/src/'"$FILE"'"] \\'
+	ns='  [file normalize "${origin_dir}/src/'"$FILE"'"] \\'
 	GET_FILES=$GET_FILES$ns$'\n'
 done < <(find . -maxdepth 1 -name "*.v" -o -name "*.sv" -o -name "*.mem" -type f)
-ns='        "[file normalize "$origin_dir/constraints/constraints.xdc"]"\\'
+ns='    "[file normalize "$origin_dir/constraints/constraints.xdc"]"\\'
 CHECK_FILES=$CHECK_FILES$ns
 
 READ_HDL=''

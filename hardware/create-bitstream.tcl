@@ -1,5 +1,3 @@
-# build settings
-set design_name "HDMI"
 set fpga_part "xc7z020clg400-1"
 set bitstream_filepath [file normalize "./vivado.runs/impl_1/design_1_wrapper.bit"]
 
@@ -48,7 +46,7 @@ read_mem [file normalize "${src_dir}/./text_greet.mem"]
 read_xdc [file normalize "../constraints/constraints.xdc"]
 
 # synth
-synth_design -top "top_${design_name}" -part ${fpga_part}
+synth_design -top "top_HDMI" -part ${fpga_part}
 
 # place and route
 opt_design

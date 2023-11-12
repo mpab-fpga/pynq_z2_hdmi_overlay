@@ -40,7 +40,10 @@ _ide/
 RemoteSystemsTempFiles/
 
 # verilator
-obj_dir
+obj_dir/
+
+# VSCode
+.vscode/
 
 # Eclipse
 

@@ -6,7 +6,7 @@ start=$(date +%s)
 
 rm -rf ./*.log
 
-vivado -mode batch -nojournal -notrace -source ../build-vivado.tcl
+vivado -mode batch -nojournal -notrace -source ../build-vivado.tcl | grep -E 'ERROR:|WARNING:|INFO:'
 
 end=$(date +%s)
 elapsed=$((end-start))

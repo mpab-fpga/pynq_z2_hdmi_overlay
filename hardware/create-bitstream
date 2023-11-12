@@ -2,7 +2,7 @@
 mkdir -p ./vivado/vivado.runs/impl_1/
 cd ./vivado || exit
 start=$(date +%s)
-vivado -mode batch -nojournal -notrace -source ../$0.tcl | grep -E 'ERROR:|WARNING:|INFO:'
+vivado -mode batch -nojournal -notrace -source ../$0.tcl | grep -E 'ERROR:|WARNING:|INFO:|bitstream'
 end=$(date +%s)
 elapsed=$((end-start))
 
