@@ -67,18 +67,18 @@ int main(int argc, char *argv[])
   SDL_Log("Simulation running. 'Q' or escape key to exit.\n\n");
 
   // initialize Verilog modules
-  Vsim sim = Vsim();
+  Vsim *sim = new Vsim();
 
   // TODO: implement reset
   //  reset
-  //  sim.rst_pix = 1;
-  //  sim.video_clk_pix = 0;
-  //  sim.eval();
-  //  sim.video_clk_pix = 1;
-  //  sim.eval();
-  //  sim.rst_pix = 0;
-  //  sim.video_clk_pix = 0;
-  //  sim.eval();
+  //  sim->rst_pix = 1;
+  //  sim->video_clk_pix = 0;
+  //  sim->eval();
+  //  sim->video_clk_pix = 1;
+  //  sim->eval();
+  //  sim->rst_pix = 0;
+  //  sim->video_clk_pix = 0;
+  //  sim->eval();
 
   uint64_t frame_count = 0;
   uint64_t start_ticks = SDL_GetPerformanceCounter();
@@ -86,25 +86,25 @@ int main(int argc, char *argv[])
   while (true)
   {
     // cycle the clock
-    sim.video_clk_pix = 1;
-    sim.eval();
-    sim.video_clk_pix = 0;
-    sim.eval();
+    sim->video_clk_pix = 1;
+    sim->eval();
+    sim->video_clk_pix = 0;
+    sim->eval();
 
     // update pixel inside draw window
-    if (sim.video_enable)
+    if (sim->video_enable)
     {
-      Pixel *p = &screenbuffer[sim.sy * HRES + sim.sx];
+      Pixel *p = &screenbuffer[sim->sy * HRES + sim->sx];
       p->a = 0xFF; // transparency
-      p->b = sim.blue;
-      p->g = sim.green;
-      p->r = sim.red;
+      p->b = sim->blue;
+      p->g = sim->green;
+      p->r = sim->red;
     }
 
     // update texture outside draw window
-    // if (sim.vsync)
+    // if (sim->vsync)
     // the above should work, but SDL gets stuck here, so check coords instead
-    if (sim.frame_start)
+    if (sim->frame_start)
     {
       // check for quit event
       SDL_Event e;
@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
   double fps = (double)frame_count / duration;
   SDL_Log("Frames per second: %.1f\n", fps);
 
-  sim.final(); // simulation done
+  sim->final(); // simulation done
 
   SDL_DestroyTexture(sdl_texture);
   SDL_DestroyRenderer(sdl_renderer);
