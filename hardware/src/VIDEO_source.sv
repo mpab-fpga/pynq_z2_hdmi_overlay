@@ -32,19 +32,80 @@ module VIDEO_source #(
       .*
   );
 
-  logic [COLSPC-1:0] te_red, te_green, te_blue;
+  // logic [COLSPC-1:0] te_red, te_green, te_blue;
+  // demo_text #(
+  //   .TXT_X(0),
+  //   .TXT_L1Y(150),
+  //   .TXT_L2Y(250),
+  //   .TXT_SCALX(10),
+  //   .TXT_PAUSE(60)
+  // )text (
+  //     .red  (te_red),
+  //     .green(te_green),
+  //     .blue (te_blue),
+  //     .*
+  // );
+
+  logic [COLSPC-1:0] te1_red, te1_green, te1_blue;
   demo_text #(
-    .TXT_X(0),
-    .TXT_L1Y(150),
-    .TXT_L2Y(250),
-    .TXT_SCALX(10),
-    .TXT_PAUSE(10)
-  )text (
-      .red  (te_red),
-      .green(te_green),
-      .blue (te_blue),
+      .TXT_X(0),
+      .TXT_L1Y(0),
+      .TXT_L2Y(120),
+      .TXT_SCALX(4),
+      .TXT_SCALY(4),
+      .TXT_PAUSE(60)
+  ) text1 (
+      .red  (te1_red),
+      .green(te1_green),
+      .blue (te1_blue),
       .*
   );
+
+  logic [COLSPC-1:0] te2_red, te2_green, te2_blue;
+  demo_text #(
+      .TXT_X(320),
+      .TXT_L1Y(0),
+      .TXT_L2Y(120),
+      .TXT_SCALX(4),
+      .TXT_SCALY(4),
+      .TXT_PAUSE(60)
+  ) text2 (
+      .red  (te2_red),
+      .green(te2_green),
+      .blue (te2_blue),
+      .*
+  );
+
+  logic [COLSPC-1:0] te3_red, te3_green, te3_blue;
+  demo_text #(
+      .TXT_X(0),
+      .TXT_L1Y(240),
+      .TXT_L2Y(360),
+      .TXT_SCALX(4),
+      .TXT_SCALY(4),
+      .TXT_PAUSE(60)
+  ) text3 (
+      .red  (te3_red),
+      .green(te3_green),
+      .blue (te3_blue),
+      .*
+  );
+
+  logic [COLSPC-1:0] te4_red, te4_green, te4_blue;
+  demo_text #(
+      .TXT_X(320),
+      .TXT_L1Y(240),
+      .TXT_L2Y(360),
+      .TXT_SCALX(4),
+      .TXT_SCALY(4),
+      .TXT_PAUSE(60)
+  ) text4 (
+      .red  (te4_red),
+      .green(te4_green),
+      .blue (te4_blue),
+      .*
+  );
+
 
   logic [COLSPC-1:0] ss_red, ss_green, ss_blue;
   demo_sinescroll sinescroll (
@@ -55,10 +116,26 @@ module VIDEO_source #(
   );
 
   always_ff @(posedge video_clk_pix) begin
-    if (te_red != 0 || te_green != 0 || te_blue != 0) begin
-      red   <= te_red;
-      green <= te_green;
-      blue  <= te_blue;
+    // if (te_red != 0 || te_green != 0 || te_blue != 0) begin
+    //   red   <= te_red;
+    //   green <= te_green;
+    //   blue  <= te_blue;
+    if (te1_red != 0 || te1_green != 0 || te1_blue != 0) begin
+      red   <= te1_red;
+      green <= te1_green;
+      blue  <= te1_blue;
+    end else if (te2_red != 0 || te2_green != 0 || te2_blue != 0) begin
+      red   <= te2_red;
+      green <= te2_green;
+      blue  <= te2_blue;
+    end else if (te3_red != 0 || te3_green != 0 || te3_blue != 0) begin
+      red   <= te3_red;
+      green <= te3_green;
+      blue  <= te3_blue;
+    end else if (te4_red != 0 || te4_green != 0 || te4_blue != 0) begin
+      red   <= te4_red;
+      green <= te4_green;
+      blue  <= te4_blue;
     end else if (ss_red != 0 || ss_green != 0 || ss_blue != 0) begin
       red   <= ss_red;
       green <= ss_green;
