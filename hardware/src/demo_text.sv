@@ -5,8 +5,15 @@
 `default_nettype none `timescale 1ns / 1ps
 
 module demo_text #(
-    COORDSPC = 16,  // coordinate space (bits)
-    COLSPC   = 10   // color space (bits)
+    TXT_X=64,
+    TXT_L1Y=150,
+    TXT_L2Y=250,
+    TXT_SCALX=8,
+    TXT_SCALY=8,
+    TXT_PAUSE=80, // change message every N frames
+    VRES=480,
+    COORDSPC=16,  // coordinate space (bits)
+    COLSPC=10   // color space (bits)
 ) (
     input wire video_clk_pix,
     input wire video_enable,
@@ -42,13 +49,12 @@ module demo_text #(
   );
 
   // greeting selector
-  localparam MSG_CHG = 80;  // change message every N frames
-  logic [$clog2(MSG_CHG)-1:0] cnt_frm;  // frame counter
+  logic [$clog2(TXT_PAUSE)-1:0] cnt_frm;  // frame counter
   logic [$clog2(GREET_MSGS)-1:0] greeting;  // greeting line chosen
   always_ff @(posedge video_clk_pix) begin
     if (frame_start) begin
       cnt_frm <= cnt_frm + 1;
-      if (cnt_frm == MSG_CHG) begin
+      if (cnt_frm == TXT_PAUSE) begin
         greeting <= greeting + 1;
         cnt_frm  <= 0;
       end
@@ -58,8 +64,8 @@ module demo_text #(
   // font glyph ROM
   localparam FONT_WIDTH = 8;  // width in pixels (also ROM width)
   localparam FONT_HEIGHT = 8;  // height in pixels
-  localparam FONT_GLYPHS = 64;  // number of glyphs (0x00 - 0x3F)
-  localparam F_ROM_DEPTH = FONT_GLYPHS * FONT_HEIGHT;
+  localparam NUM_GLYPHS = 64;  // number of glyphs (0x00 - 0x3F)
+  localparam F_ROM_DEPTH = NUM_GLYPHS * FONT_HEIGHT;
   localparam CP_START = 'h20;  // first code point (0x5F - 0x20 = 0x3F)
   localparam FONT_FILE = "font_unscii_8x8_latin_uc.mem";
 
@@ -77,34 +83,33 @@ module demo_text #(
   );
 
   // sprites
-  localparam V_RES = 480;  // vertical screen resolution
   localparam SPR_CNT = 8;  // number of sprites
-  localparam LINE2 = V_RES / 2;  // where to consider second line of sprites
-  localparam SPR_SCALE_X = 8;  // enlarge sprite width by this factor
-  localparam SPR_SCALE_Y = 8;  // enlarge sprite height by this factor
+  //localparam LINE2 = VRES / 2;  // where to consider second line of sprites
+  //localparam LINE2 = TXT_Y+(TXT_SCALY*FONT_HEIGHT*1);  // where to consider second line of sprites
+  //localparam LINE2 = TXT_L2Y;  // where to consider second line of sprites
   localparam SPR_DMA = 0 - 2 * SPR_CNT;  // start sprite DMA in h-blanking
 
   // horizontal and vertical screen position of letters
   logic signed [COORDSPC-1:0] spr_x[SPR_CNT];
   logic signed [COORDSPC-1:0] spr_y[2];  // 2 lines of sprites
   initial begin
-    spr_x[0] = 64;
-    spr_x[1] = 128;
-    spr_x[2] = 192;
-    spr_x[3] = 256;
-    spr_x[4] = 320;
-    spr_x[5] = 384;
-    spr_x[6] = 448;
-    spr_x[7] = 512;
+    spr_x[0] = TXT_X+(TXT_SCALX*FONT_WIDTH*0);
+    spr_x[1] = TXT_X+(TXT_SCALX*FONT_WIDTH*1);
+    spr_x[2] = TXT_X+(TXT_SCALX*FONT_WIDTH*2);
+    spr_x[3] = TXT_X+(TXT_SCALX*FONT_WIDTH*3);
+    spr_x[4] = TXT_X+(TXT_SCALX*FONT_WIDTH*4);
+    spr_x[5] = TXT_X+(TXT_SCALX*FONT_WIDTH*5);
+    spr_x[6] = TXT_X+(TXT_SCALX*FONT_WIDTH*6);
+    spr_x[7] = TXT_X+(TXT_SCALX*FONT_WIDTH*7);
 
-    spr_y[0] = 150;
-    spr_y[1] = 250;
+    spr_y[0] = TXT_L1Y; //TXT_Y+(TXT_SCALY*FONT_HEIGHT*0);
+    spr_y[1] = TXT_L2Y; //TXT_Y+(TXT_SCALY*FONT_HEIGHT*1);
   end
 
   // signal to start sprite drawing for two rows of text
   logic spr_start;
   always_comb begin
-    spr_start = (sy < LINE2) ? (line_start && sy == spr_y[0]) : (line_start && sy == spr_y[1]);
+    spr_start = (sy < TXT_L2Y) ? (line_start && sy == spr_y[0]) : (line_start && sy == spr_y[1]);
   end
 
   
@@ -117,7 +122,7 @@ module demo_text #(
     for (i1 = 0; i1 < SPR_CNT; i1 = i1 + 1) begin
       /* verilator lint_off WIDTH */
       if (sx == SPR_DMA + i1)
-        greet_rom_addr = (sy < LINE2) ? (msg_start + i1) : (msg_start + i1 + GREET_LENGTH / 2);
+        greet_rom_addr = (sy < TXT_L2Y) ? (msg_start + i1) : (msg_start + i1 + GREET_LENGTH / 2);
       /* verilator lint_on WIDTH */
     end
   end
@@ -158,8 +163,8 @@ module demo_text #(
       sprite #(
           .WIDTH(FONT_WIDTH),
           .HEIGHT(FONT_HEIGHT),
-          .SCALE_X(SPR_SCALE_X),
-          .SCALE_Y(SPR_SCALE_Y),
+          .SCALE_X(TXT_SCALX),
+          .SCALE_Y(TXT_SCALY),
           .LSB(0),
           .CORDW(COORDSPC),
           .ADDRW($clog2(FONT_HEIGHT))

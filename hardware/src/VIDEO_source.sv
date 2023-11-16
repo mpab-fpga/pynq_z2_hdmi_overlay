@@ -33,7 +33,13 @@ module VIDEO_source #(
   );
 
   logic [COLSPC-1:0] te_red, te_green, te_blue;
-  demo_text text (
+  demo_text #(
+    .TXT_X(0),
+    .TXT_L1Y(150),
+    .TXT_L2Y(250),
+    .TXT_SCALX(10),
+    .TXT_PAUSE(10)
+  )text (
       .red  (te_red),
       .green(te_green),
       .blue (te_blue),

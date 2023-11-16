@@ -1,5 +1,6 @@
 #!/usr/bin/env sh
-
+rm -f ./obj_dir/sim_sdl
+rm -f ./obj_dir/sim_sdl.exe
 make
 cd ../hardware/src
 [ -f ../../verilator/obj_dir/sim_sdl ] && ../../verilator/obj_dir/sim_sdl && exit
