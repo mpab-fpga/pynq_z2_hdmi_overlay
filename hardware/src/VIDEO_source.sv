@@ -33,13 +33,7 @@ module VIDEO_source #(
   );
 
   // logic [COLSPC-1:0] te_red, te_green, te_blue;
-  // demo_text #(
-  //   .TXT_X(0),
-  //   .TXT_L1Y(150),
-  //   .TXT_L2Y(250),
-  //   .TXT_SCALX(10),
-  //   .TXT_PAUSE(60)
-  // )text (
+  // demo_text text (
   //     .red  (te_red),
   //     .green(te_green),
   //     .blue (te_blue),
@@ -48,9 +42,9 @@ module VIDEO_source #(
 
   logic [COLSPC-1:0] te1_red, te1_green, te1_blue;
   demo_text #(
-      .TXT_X(0),
-      .TXT_L1Y(0),
-      .TXT_L2Y(120),
+      .TXT_X(32),
+      .TXT_L1Y(64),
+      .TXT_L2Y(160),
       .TXT_SCALX(4),
       .TXT_SCALY(4),
       .TXT_PAUSE(60)
@@ -63,9 +57,9 @@ module VIDEO_source #(
 
   logic [COLSPC-1:0] te2_red, te2_green, te2_blue;
   demo_text #(
-      .TXT_X(320),
-      .TXT_L1Y(0),
-      .TXT_L2Y(120),
+      .TXT_X(352),
+      .TXT_L1Y(64),
+      .TXT_L2Y(160),
       .TXT_SCALX(4),
       .TXT_SCALY(4),
       .TXT_PAUSE(60)
@@ -78,9 +72,9 @@ module VIDEO_source #(
 
   logic [COLSPC-1:0] te3_red, te3_green, te3_blue;
   demo_text #(
-      .TXT_X(0),
-      .TXT_L1Y(240),
-      .TXT_L2Y(360),
+      .TXT_X(32),
+      .TXT_L1Y(304),
+      .TXT_L2Y(400),
       .TXT_SCALX(4),
       .TXT_SCALY(4),
       .TXT_PAUSE(60)
@@ -93,9 +87,9 @@ module VIDEO_source #(
 
   logic [COLSPC-1:0] te4_red, te4_green, te4_blue;
   demo_text #(
-      .TXT_X(320),
-      .TXT_L1Y(240),
-      .TXT_L2Y(360),
+      .TXT_X(352),
+      .TXT_L1Y(304),
+      .TXT_L2Y(400),
       .TXT_SCALX(4),
       .TXT_SCALY(4),
       .TXT_PAUSE(60)
@@ -105,7 +99,6 @@ module VIDEO_source #(
       .blue (te4_blue),
       .*
   );
-
 
   logic [COLSPC-1:0] ss_red, ss_green, ss_blue;
   demo_sinescroll sinescroll (
