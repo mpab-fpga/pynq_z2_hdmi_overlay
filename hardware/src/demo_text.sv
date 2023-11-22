@@ -5,15 +5,15 @@
 `default_nettype none `timescale 1ns / 1ps
 
 module demo_text #(
-    TXT_X=0,
-    TXT_L1Y=150,
-    TXT_L2Y=250,
-    TXT_SCALX=10,
-    TXT_SCALY=10,
-    TXT_PAUSE=80, // change message every N frames
-    VRES=480,
-    COORDSPC=16,  // coordinate space (bits)
-    COLSPC=10   // color space (bits)
+    TXT_X = 64,
+    TXT_L1Y = 150,
+    TXT_L2Y = TXT_L1Y + TXT_SCALY * FONT_HEIGHT,
+    TXT_SCALX = 8,
+    TXT_SCALY = 8,
+    TXT_PAUSE = 80,  // change message every N frames
+    VRES = 480,
+    COORDSPC = 16,  // coordinate space (bits)
+    COLSPC = 10  // color space (bits)
 ) (
     input wire video_clk_pix,
     input wire video_enable,
@@ -49,7 +49,7 @@ module demo_text #(
   );
 
   // greeting selector
-  logic [$clog2(TXT_PAUSE)-1:0] cnt_frm;  // frame counter
+  logic [ $clog2(TXT_PAUSE)-1:0] cnt_frm;  // frame counter
   logic [$clog2(GREET_MSGS)-1:0] greeting;  // greeting line chosen
   always_ff @(posedge video_clk_pix) begin
     if (frame_start) begin
@@ -93,17 +93,17 @@ module demo_text #(
   logic signed [COORDSPC-1:0] spr_x[SPR_CNT];
   logic signed [COORDSPC-1:0] spr_y[2];  // 2 lines of sprites
   initial begin
-    spr_x[0] = TXT_X+(TXT_SCALX*FONT_WIDTH*0);
-    spr_x[1] = TXT_X+(TXT_SCALX*FONT_WIDTH*1);
-    spr_x[2] = TXT_X+(TXT_SCALX*FONT_WIDTH*2);
-    spr_x[3] = TXT_X+(TXT_SCALX*FONT_WIDTH*3);
-    spr_x[4] = TXT_X+(TXT_SCALX*FONT_WIDTH*4);
-    spr_x[5] = TXT_X+(TXT_SCALX*FONT_WIDTH*5);
-    spr_x[6] = TXT_X+(TXT_SCALX*FONT_WIDTH*6);
-    spr_x[7] = TXT_X+(TXT_SCALX*FONT_WIDTH*7);
+    spr_x[0] = TXT_X + (TXT_SCALX * FONT_WIDTH * 0);
+    spr_x[1] = TXT_X + (TXT_SCALX * FONT_WIDTH * 1);
+    spr_x[2] = TXT_X + (TXT_SCALX * FONT_WIDTH * 2);
+    spr_x[3] = TXT_X + (TXT_SCALX * FONT_WIDTH * 3);
+    spr_x[4] = TXT_X + (TXT_SCALX * FONT_WIDTH * 4);
+    spr_x[5] = TXT_X + (TXT_SCALX * FONT_WIDTH * 5);
+    spr_x[6] = TXT_X + (TXT_SCALX * FONT_WIDTH * 6);
+    spr_x[7] = TXT_X + (TXT_SCALX * FONT_WIDTH * 7);
 
-    spr_y[0] = TXT_L1Y; //TXT_Y+(TXT_SCALY*FONT_HEIGHT*0);
-    spr_y[1] = TXT_L2Y; //TXT_Y+(TXT_SCALY*FONT_HEIGHT*1);
+    spr_y[0] = TXT_L1Y;  //TXT_Y+(TXT_SCALY*FONT_HEIGHT*0);
+    spr_y[1] = TXT_L2Y;  //TXT_Y+(TXT_SCALY*FONT_HEIGHT*1);
   end
 
   // signal to start sprite drawing for two rows of text
@@ -188,30 +188,32 @@ module demo_text #(
   // font colours
   localparam COLR_A = 'h125;  // initial colour A
   localparam COLR_B = 'h421;  // initial colour B
-  localparam SLIN_1A = TXT_L1Y; //'d150;  // 1st line of colour A
+  localparam SLIN_1A = TXT_L1Y;  //'d150;  // 1st line of colour A
   localparam SLIN_1B = TXT_L1Y+(FONT_HEIGHT*TXT_SCALY-TXT_SCALY)/2;//(FONT_HEIGHT/2 -1)*TXT_SCALY; //'d178;  // 1st line of colour B
-  localparam SLIN_2A = TXT_L2Y; //'d250;  // 2nd line of colour A
+  localparam SLIN_2A = TXT_L2Y;  //'d250;  // 2nd line of colour A
   localparam SLIN_2B = TXT_L2Y+(FONT_HEIGHT*TXT_SCALY-TXT_SCALY)/2; //'d278;  // 2nd line of colour B
   // TODO: clamp to prevent colour wrap-around  and scale better
-  localparam LINE_CLR_REP = TXT_SCALY >> 3; // number of lines to repeat current color
+  localparam LINE_CLR_REP = (TXT_SCALY >> 2) > 0 ? (TXT_SCALY >> 2) : 1;  // number of lines to repeat current color
 
   logic [11:0] font_colr;  // 12 bit colour (4-bit per channel)
   logic [15:0] cnt_line;
   always_ff @(posedge video_clk_pix) begin
     if (line_start) begin
       if (sy == SLIN_1A || sy == SLIN_2A) begin
-        cnt_line  <= 0;
+        cnt_line  <= LINE_CLR_REP;
         font_colr <= COLR_A;
       end else if (sy == SLIN_1B || sy == SLIN_2B) begin
-        cnt_line  <= 0;
+        cnt_line  <= LINE_CLR_REP;
         font_colr <= COLR_B;
       end else begin
-        cnt_line <= cnt_line + 1;
-        if (cnt_line > LINE_CLR_REP) begin
-          cnt_line  <= 0;
+        if (cnt_line > 0) begin
+          cnt_line <= cnt_line - 1;
+        end else begin
           font_colr <= font_colr + 'h111;
+          cnt_line  <= LINE_CLR_REP;
         end
       end
+
     end
   end
 
@@ -221,7 +223,7 @@ module demo_text #(
     {red_spr, green_spr, blue_spr} = (spr_pix != 0) ? font_colr : 12'h000;
   end
 
-  // VGA output
+  // output
   always_ff @(posedge video_clk_pix) begin
     red   <= video_enable && (spr_pix != 0) ? COLSPC'({2{red_spr}}) : COLSPC'(0);
     green <= video_enable && (spr_pix != 0) ? COLSPC'({2{green_spr}}) : COLSPC'(0);
