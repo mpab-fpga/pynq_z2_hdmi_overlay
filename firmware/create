@@ -1,12 +1,18 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 [ -d "./vitis" ] && echo "directory vitis already exists - skipping firmware project creation" && exit
+
+unset xsct_cmd
+command -v xsct &> /dev/null && export xsct_cmd="xsct"
+command -v xsct.bat &> /dev/null && export xsct_cmd="xsct.bat"
+[ -z ${xsct_cmd+x} ] && echo "ERROR: can't locate xsct.bat or xsct" && exit 1
+
 start=$(date +%s)
 mkdir vitis
 cd vitis || exit
-xsct.bat ../create-vitis.tcl
+$xsct_cmd ../create-vitis.tcl
 end=$(date +%s)
-elapsed=$((end-start))
+elapsed=$((end - start))
 
 echo "============================================="
 echo "create firmware project took $elapsed seconds"

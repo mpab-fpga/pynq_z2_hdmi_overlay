@@ -1,10 +1,15 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
+
+unset xsct_cmd
+command -v xsct &>/dev/null && export xsct_cmd="xsct"
+command -v xsct.bat &>/dev/null && export xsct_cmd="xsct.bat"
+[ -z ${xsct_cmd+x} ] && echo "ERROR: can't locate xsct.bat or xsct" && exit 1
 
 start=$(date +%s)
 cd vitis || exit
-xsct.bat ../build-vitis.tcl
+$xsct_cmd ../build-vitis.tcl
 end=$(date +%s)
-elapsed=$((end-start))
+elapsed=$((end - start))
 
 echo "============================================="
 echo "build firmware project took $elapsed seconds"

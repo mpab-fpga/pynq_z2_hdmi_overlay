@@ -73,18 +73,23 @@ puts "creating application $APP, system $SYS, board $BOARD"
 # Open the platform
 platform read ${PLATFORM}/platform.spr
 
+platform generate
+
 # create C application
 # app create -name $APP -platform $PLATFORM -template {Empty Application(C)} -domain standalone_domain -lang c
+puts "app create -name $APP -platform $PLATFORM -template {Hello World} -domain standalone_domain -lang c"
 app create -name $APP -platform $PLATFORM -template {Hello World} -domain standalone_domain -lang c
 
+# BUG: fails if no sources
 # import any sources
-importsources -name $APP -path ../src/
+#importsources -name $APP -path ../src/
 
 # build application project
 app build -name $APP
 
 # build system project
 sysproj build -name $SYS
+
 # ========================================================
 # ensure all projects are added to the workspace
 importprojects ./
