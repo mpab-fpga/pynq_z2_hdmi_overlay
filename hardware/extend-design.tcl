@@ -1,8 +1,14 @@
 # Create ports
 set hdmi_tx_d_p [ create_bd_port -dir O -from 2 -to 0 hdmi_tx_d_p ]
-set hdmi_tx_clk_n [ create_bd_port -dir O -type clk -freq_hz 100000000 hdmi_tx_clk_n ]
+set hdmi_tx_clk_n [ create_bd_port -dir O -type clk hdmi_tx_clk_n ]
+set_property -dict [ list \
+  CONFIG.FREQ_HZ {100000000} \
+  ] $hdmi_tx_clk_n
 set hdmi_tx_d_n [ create_bd_port -dir O -from 2 -to 0 hdmi_tx_d_n ]
-set hdmi_tx_clk_p [ create_bd_port -dir O -type clk -freq_hz 100000000 hdmi_tx_clk_p ]
+set hdmi_tx_clk_p [ create_bd_port -dir O -type clk hdmi_tx_clk_p ]
+set_property -dict [ list \
+  CONFIG.FREQ_HZ {100000000} \
+  ] $hdmi_tx_clk_p
 set sysclk [ create_bd_port -dir I -type clk -freq_hz 125000000 sysclk ]
 
 # Create instance: top_HDMI_0, and set properties

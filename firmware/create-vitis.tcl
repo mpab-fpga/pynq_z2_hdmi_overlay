@@ -42,6 +42,7 @@ set BOARD "pynq_z2"
 set PLATFORM ${BOARD}_pfm
 set APP ${PROJECT_NAME}_app
 set SYS ${APP}_system
+set XILFFS_VER 5.1
 
 # set the workspace location
 setws ./
@@ -56,10 +57,12 @@ platform create -name $PLATFORM\
     -proc {ps7_cortexa9_0} -os {standalone} -out {./}
 
 platform write
-platform generate -domains
-platform active $PLATFORM
+#platform generate -domains
+::scw::regenerate_psinit $xsa_filepath
+#::scw::get_mss_path
+#platform active $PLATFORM
 bsp reload
-bsp setlib -name xilffs -ver 5.0
+bsp setlib -name xilffs -ver $XILFFS_VER
 bsp write
 bsp reload
 catch {bsp regenerate}
