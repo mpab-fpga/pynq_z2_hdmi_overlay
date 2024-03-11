@@ -1,0 +1,22 @@
+#!/usr/bin/env sh
+
+hw() {
+    cd ./hardware || exit
+    ./$0
+    cd ..
+}
+
+fw() {
+    cd ./firmware || exit
+    ./$0
+    cd ..
+}
+
+hw
+fw
+
+# generate version files
+VIVADO_VERSION=$(vivado -version | grep "vivado " | sed "s/^.*vivado //")
+echo $VIVADO_VERSION > ./hardware/vivado_version.txt
+VITIS_VERSION=$(vitis-run --version | grep "vitis-run " | sed "s/^.*vitis-run //")
+echo $VITIS_VERSION > ./firmware/vitis_version.txt

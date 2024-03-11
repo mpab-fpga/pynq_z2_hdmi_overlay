@@ -1,5 +1,12 @@
 #!/usr/bin/env sh
 
+# check version against version file and warn/halt on mismatch
+VIVADO_VERSION=$(vivado -version | grep "vivado " | sed "s/^.*vivado //")
+FILE_VIVADO_VERSION="$(cat ./vivado_version.txt)"
+echo "$0 $FILE_VIVADO_VERSION"
+[ "$FILE_VIVADO_VERSION" != "$VIVADO_VERSION" ] && echo "ERROR: hardware scripts created using $FILE_VIVADO_VERSION, but environment is $VIVADO_VERSION" && exit
+
+
 [ -d "./vivado" ] && echo "directory vivado already exists - skipping hardware project creation" && exit
 mkdir -p ./vivado # for log file
 

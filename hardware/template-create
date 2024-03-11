@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 # comments and blank lines are permitted in the manifest
 copy_manifest_if () {
@@ -11,7 +11,12 @@ if [ -f "$1" ]; then
 			cp "$2/$LINE" "$3"
 			echo "INFO: $LINE" copied
 		else
-			echo "ERROR: bad manifest - $2/$LINE not found"
+			FILENAME="${LINE##*/}"
+			if [ -f "$3/$FILENAME" ]; then 
+				echo "WARNING: manifest source $2/$LINE not found, but destination $3/$FILENAME exists"
+			else
+				echo "ERROR: manifest source $2/$LINE not found"
+			fi
 		fi
 	done < "$1"
 else
@@ -51,12 +56,33 @@ TEMPLATE_NAME="$0-vivado.tcl"
 [ ! -f "$TEMPLATE_NAME" ] && echo "$TEMPLATE_NAME not found" && exit
 TARGET_NAME=${TEMPLATE_NAME//template-/}
 
+VIVADO_VERSION=$(vivado -version | grep "vivado v" | sed "s/^.*vivado v//" | sed "s/ (64-bit)//")
+
+case "$VIVADO_VERSION" in
+   "2023.2.1") #OK
+   ;;
+   "2023.2") #OK
+   ;;
+   "2023.1") #OK
+   ;;
+   *) echo "unhandled vivado version: $VIVADO_VERSION" && exit
+   ;;
+esac
+
 # NB: awk b0rkened on macos
 cat "$TEMPLATE_NAME" \
 | awk -v r="$CHECK_FILES" '{gsub(/@@CHECK_REQUIRED_FILES@@/,r)}1' \
 | awk -v r="$GET_FILES" '{gsub(/@@GET_REQUIRED_FILES@@/,r)}1' \
 > "$TARGET_NAME"
 echo "vivado template: $TEMPLATE_NAME => $TARGET_NAME"
+
+TEMPLATE_NAME="template-create-design_1.tcl"
+[ ! -f "$TEMPLATE_NAME" ] && echo "$TEMPLATE_NAME not found" && exit
+TARGET_NAME=${TEMPLATE_NAME//template-/}
+cat "$TEMPLATE_NAME" \
+| awk -v r="$VIVADO_VERSION" '{gsub(/@@VIVADO_VERSION@@/,r)}1' \
+> "$TARGET_NAME"
+echo "design template: $TEMPLATE_NAME => $TARGET_NAME"
 
 TEMPLATE_NAME="$0-bitstream.tcl"
 [ ! -f "$TEMPLATE_NAME" ] && echo "$TEMPLATE_NAME not found" && exit

@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+TEMPLATE_NAME="$0-vitis.tcl"
+[ ! -f "$TEMPLATE_NAME" ] && echo "$TEMPLATE_NAME not found" && exit
+TARGET_NAME=${TEMPLATE_NAME//template-/}
+
+VITIS_VERSION=$(vitis-run --version | grep "vitis-run v" | sed "s/^.*vitis-run v//" | sed "s/ (64-bit)//")
+
+case "$VITIS_VERSION" in
+   "2023.2.1") XILFFS_VERSION=5.1
+   ;;
+   "2023.2") XILFFS_VERSION=5.1
+   ;;
+   "2023.1") XILFFS_VERSION=5.0
+   ;;
+   *) echo "unhandled vitis version: $VITIS_VERSION" && exit
+   ;;
+esac
+
+# NB: awk b0rkened on macos
+cat "$TEMPLATE_NAME" \
+| awk -v r="$XILFFS_VERSION" '{gsub(/@@XILFFS_VERSION@@/,r)}1' \
+> "$TARGET_NAME"
+echo "vitis template: $TEMPLATE_NAME => $TARGET_NAME"
+
