@@ -84,9 +84,6 @@ module demo_text #(
 
   // sprites
   localparam SPR_CNT = 8;  // number of sprites
-  //localparam LINE2 = VRES / 2;  // where to consider second line of sprites
-  //localparam LINE2 = TXT_Y+(TXT_SCALY*FONT_HEIGHT*1);  // where to consider second line of sprites
-  //localparam LINE2 = TXT_L2Y;  // where to consider second line of sprites
   localparam SPR_DMA = 0 - 2 * SPR_CNT;  // start sprite DMA in h-blanking
 
   // horizontal and vertical screen position of letters
@@ -192,8 +189,12 @@ module demo_text #(
   localparam SLIN_1B = TXT_L1Y+(FONT_HEIGHT*TXT_SCALY-TXT_SCALY)/2;//(FONT_HEIGHT/2 -1)*TXT_SCALY; //'d178;  // 1st line of colour B
   localparam SLIN_2A = TXT_L2Y;  //'d250;  // 2nd line of colour A
   localparam SLIN_2B = TXT_L2Y+(FONT_HEIGHT*TXT_SCALY-TXT_SCALY)/2; //'d278;  // 2nd line of colour B
-  // TODO: clamp to prevent colour wrap-around  and scale better
+  
+  // DONE: clamp to prevent colour underflow
+  // TODO: clip to prevent colour overflow
+  // TODO: scale gradient between lower and upper bounds
   localparam LINE_CLR_REP = (TXT_SCALY >> 2) > 0 ? (TXT_SCALY >> 2) : 1;  // number of lines to repeat current color
+  localparam GRADIENT = 'h111;
 
   logic [11:0] font_colr;  // 12 bit colour (4-bit per channel)
   logic [15:0] cnt_line;
@@ -209,7 +210,7 @@ module demo_text #(
         if (cnt_line > 0) begin
           cnt_line <= cnt_line - 1;
         end else begin
-          font_colr <= font_colr + 'h111;
+          font_colr <= font_colr + GRADIENT;
           cnt_line  <= LINE_CLR_REP;
         end
       end
