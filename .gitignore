@@ -1,4 +1,5 @@
-*.html
+**/*.html
+**/.DS_Store
 
 # Vivado
 
