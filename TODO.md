@@ -3,13 +3,18 @@
 ## Todo
 
 - implement design
+- test vitis empty and hello world variants
 - bug: create-vitis-tcl should check if source files are present before importing
-
 ```tcl
 importsources -name $APP -path ../src/
 ```
 
-- test vitis empty and hello world variants
+## Doing
+
+- replace Vitis xsct with python (firmware create and build)
+  - use command: vitis -s *-vitis.py
+  - reverse engineer python template
+  - update master template project
 
 ## Done
 

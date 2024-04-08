@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+# check version against version file and warn/halt on mismatch
+VITIS_VERSION=$(vitis-run --version | grep "vitis-run " | sed "s/^.*vitis-run //")
+FILE_VITIS_VERSION="$(cat ./vitis_version.txt)"
+echo "$0 $FILE_VITIS_VERSION"
+[ "$FILE_VITIS_VERSION" != "$VITIS_VERSION" ] && echo "ERROR: firmware scripts created using $FILE_VITIS_VERSION, but environment is $VITIS_VERSION" && exit
+
+[ -d "./vitis" ] && echo "directory vitis already exists - skipping firmware project creation" && exit
+
+start=$(date +%s)
+mkdir vitis
+cd vitis || exit
+vitis -s ../create-vitis.py
+end=$(date +%s)
+elapsed=$((end - start))
+
+echo "============================================="
+echo "create firmware project took $elapsed seconds"
+echo "============================================="
