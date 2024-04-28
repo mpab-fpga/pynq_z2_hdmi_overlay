@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
-unset xsct_cmd
-command -v xsct &>/dev/null && export xsct_cmd="xsct"
-command -v xsct.bat &>/dev/null && export xsct_cmd="xsct.bat"
-[ -z ${xsct_cmd+x} ] && echo "ERROR: can't locate xsct.bat or xsct" && exit 1
+unset XSCT_CMD
+command -v xsct &>/dev/null && export XSCT_CMD="xsct"
+command -v xsct.bat &>/dev/null && export XSCT_CMD="xsct.bat"
+[ -z $XSCT_CMD ] && err_echo " can't locate xsct.bat or xsct" && exit 1
 
 start=$(date +%s)
 cd vitis || exit
-$xsct_cmd ../build-vitis.tcl
+$XSCT_CMD ../build-vitis.tcl
 end=$(date +%s)
 elapsed=$((end - start))
 

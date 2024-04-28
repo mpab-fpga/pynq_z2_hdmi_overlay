@@ -1,13 +1,12 @@
 # Project tracking
 
-## Todo
+## Done
 
-- implement design
-- test vitis empty and hello world variants
-- bug: create-vitis-tcl should check if source files are present before importing
-```tcl
-importsources -name $APP -path ../src/
-```
+- misc. script compatibility improvements for macos
+- fix issue: vitis v2023.2 where app create fails to generate the *_app and *_system projects, leading to an error when building the (non-existent) projects
+  - temporary hack in create-vitis.tcl, requires cleanup/rewrite
+- create project from template
+- merge changes back into template
 
 ## Doing
 
@@ -16,9 +15,11 @@ importsources -name $APP -path ../src/
   - reverse engineer python template
   - update master template project
 
-## Done
+## Todo
 
-- fix issue: vitis v2023.2 where app create fails to generate the *_app and *_system projects, leading to an error when building the (non-existent) projects
-  - temporary hack in create-vitis.tcl, requires cleanup/rewrite
-- create project from template
-- merge changes back into template
+- implement design
+- test vitis empty and hello world variants
+- bug: create-vitis-tcl should check if source files are present before importing
+```tcl
+importsources -name $APP -path ../src/
+```

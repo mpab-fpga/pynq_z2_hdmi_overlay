@@ -1,12 +1,33 @@
 #!/usr/bin/env bash
 
-# check version against version file and warn/halt on mismatch
-VITIS_VERSION=$(vitis-run --version | grep "vitis-run " | sed "s/^.*vitis-run //")
-FILE_VITIS_VERSION="$(cat ./vitis_version.txt)"
-echo "$0 $FILE_VITIS_VERSION"
-[ "$FILE_VITIS_VERSION" != "$VITIS_VERSION" ] && echo "ERROR: firmware scripts created using $FILE_VITIS_VERSION, but environment is $VITIS_VERSION" && exit
+# echo with color
+err_echo() {
+	printf  "\e[1m\e[31mERROR: $1\e[0m\n"
+}
 
-[ -d "./vitis" ] && echo "directory vitis already exists - skipping firmware project creation" && exit
+wrn_echo() {
+	printf  "\e[1m\e[33mWARNING: $1\e[0m\n"
+}
+
+inf_echo() {
+	printf  "\e[1m\e[30mINFO: $1\e[0m\n"
+}
+
+ok_echo() {
+	printf  "\e[1m\e[32m$1\e[0m\n"
+}
+
+XIL_ENV_ERR=
+[ -z "$(command -v vitis-run)" ] && err_echo "vitis-run not found" && XIL_ENV_ERR=1
+[ ! -z "$XIL_ENV_ERR" ] && exit
+
+# check version against version file and warn/halt on mismatch
+VITIS_VERSION=$(vitis-run --version | grep "vitis-run v" | sed "s/^.*vitis-run v//" | sed "s/ (64-bit)//" | sed "s/\r//" | sed "s/\n//")
+FILE_VITIS_VERSION="$(cat ./vitis_version.txt)"
+[ "$FILE_VITIS_VERSION" != "$VITIS_VERSION" ] && err_echo " firmware scripts created using $FILE_VITIS_VERSION, but environment is $VITIS_VERSION" && exit
+ok_echo "$0 - $VITIS_VERSION"
+
+[ -d "./vitis" ] && wrn_echo "directory vitis already exists - skipping firmware project creation" && exit
 
 start=$(date +%s)
 mkdir vitis
@@ -15,6 +36,6 @@ vitis -s ../create-vitis.py
 end=$(date +%s)
 elapsed=$((end - start))
 
-echo "============================================="
-echo "create firmware project took $elapsed seconds"
-echo "============================================="
+inf_echo "============================================="
+inf_echo "create firmware project took $elapsed seconds"
+inf_echo "============================================="

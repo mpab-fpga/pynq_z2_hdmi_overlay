@@ -1,5 +1,6 @@
 **/*.html
 **/.DS_Store
+**/._*
 **/__pycache__
 
 # environments

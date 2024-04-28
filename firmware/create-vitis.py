@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
+
+###############################################################################
+# @file create-vitis.py
+# Author: mpab
+# Copyright (c) 2024-, mpab
+# All rights reserved.
+###############################################################################
+
+# generates assets in the Vitis workspace (firmware) directory
+# expects to be run in ./firmware/vitis
+
 import vitis
 import os
 import shutil
 import platform as os_platform
-
-###############################################################################
-# @file create-vitis.py
-#  Author: mpab
-#
-###############################################################################
-# generates assets in the Vitis workspace (firmware) directory
-# expects to be run in ./firmware/vitis
 
 def main():
     PROJECT_NAME="hdmi_overlay"
