@@ -7,27 +7,15 @@
 **/venv-*
 **/denv-*
 
-# Vivado
-
-vivado/
-
+# Xilinx/Vivado/Vitis
+*.cache
+*.hw
+*.ip_user_files
+*.runs
+*.sim
+*.srcs
 *.Xil
-*.jou
-*.log
-*.str
-*.xsa
-*.bit
-
-fpga.cache/
-fpga.hw/
-fpga.runs/
-fpga.sim/
-fpga.gen/
-
-# Vitis
-
-vitis/
-
+*.xpr
 *.o
 *.d
 *.a
@@ -35,22 +23,44 @@ vitis/
 *.bin
 *.BIN
 *.bif
+*.jou
+*.log
+*.str
+*.xsa
+*.bit
+**/webtalk.*
+**/export
+**/.log
+**/Debug
+**/Release
+**/_ide
+**/.metadata
+**/.analytics
+**/RemoteSystemsTempFiles/
+**/fpga.*
+**/vitis
+**/vivado
 
-export/
-.log/
-Debug/
-Release/
-_ide/
-.metadata/
+# Verilator
+**/obj_dir/
 
-.analytics
-RemoteSystemsTempFiles/
+# iCE40
+*yosys.log
+*.bin
+*.rpt
 
-# verilator
-obj_dir/
+# ECP5
+*yosys.log
+*.bit
+*.svf
+
+# cocotb
+results*.xml
+sim_build*
+*.vcd
 
 # VSCode
-.vscode/
+**/.vscode
 
 # Eclipse
 
