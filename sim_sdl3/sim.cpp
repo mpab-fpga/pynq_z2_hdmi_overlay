@@ -1,6 +1,5 @@
 #define NO_STDIO_REDIRECT
 
-#include "Vsim.h"
 #include <SDL3/SDL.h>
 #include <stdio.h>
 #include <verilated.h>

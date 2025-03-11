@@ -1,0 +1,45 @@
+#!/usr/bin/env sh
+
+[ -z "$PGE_DIR" ] && echo "env-var PGE_DIR (installation folder) is not defined, using local PGE" && export PGE_DIR=./
+[ ! -d "$PGE_DIR" ] && echo "ERROR: env-var PGE_DIR=${PGE_DIR} is not a folder" && exit
+[ ! -d "$PGE_DIR" ] && echo "ERROR: env-var PGE_DIR=${PGE_DIR} is not a folder" && exit
+
+PGE_INC_PIXEL="$PGE_DIR/olcPixelGameEngine"
+[ ! -d "$PGE_INC_PIXEL" ] && echo "ERROR: $PGE_INC_PIXEL is not a folder" && exit
+
+PGE_INC_SOUNDWAVE="$PGE_DIR/olcSoundWaveEngine"
+[ ! -d "$PGE_INC_SOUNDWAVE" ] && echo "ERROR: $PGE_INC_SOUNDWAVE is not a folder" && exit
+
+APPBASE="${PWD##*/}"
+APPSRC=""
+[ ! "x$1" = "x" ] && APPBASE="$1"
+[ -f "$APPBASE.cpp" ] && APPSRC="$APPBASE.cpp"
+[ -z "$APPSRC" ] && echo "error - empty application source" && exit
+[ ! -f "$APPSRC" ] && echo "error - invalid application source" && exit
+
+UNAME=$(uname)
+DISTRO="${UNAME%%-*}"
+echo "PGE_INC_PIXEL: $PGE_INC_PIXEL"
+echo "PGE_INC_SOUNDWAVE: $PGE_INC_SOUNDWAVE"
+echo "DISTRO: $DISTRO, APPSRC: $APPSRC, APPBASE: $APPBASE"
+
+if [ "$DISTRO" = "Linux" ]; then
+    g++ -o $APPBASE $APPSRC \
+    -I$PGE_INC_PIXEL -I$PGE_INC_SOUNDWAVE \
+    -lX11 -lGL -lpthread -lpng -lpulse-simple -lpulse -lstdc++fs -std=c++17
+elif [ "$DISTRO" = "Darwin" ]; then
+    # brew install libpng libx11 libglu sdl2_mixer
+    export SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk
+    clang++ -std=c++17 -mmacosx-version-min=10.15 -Wall \
+        -framework OpenGL -framework GLUT -framework Carbon \
+        -I$(brew --prefix)/include -I$(brew --prefix)/include/SDL2 \
+        -I$PWD -I$PGE_INC_PIXEL -I$PGE_INC_SOUNDWAVE -I$SDKROOT/usr/include \
+        -L$(brew --prefix)/lib \
+        -lpng -lsdl2_mixer $APPSRC -o $APPBASE
+elif [ "$DISTRO" = "MINGW64_NT" ]; then
+    g++ -o $APPBASE.exe $APPSRC \
+    -I$PGE_INC_PIXEL -I$PGE_INC_SOUNDWAVE \
+    -lgdi32 -lopengl32 -lgdiplus -lShlwapi -ldwmapi -lwinmm -lstdc++fs -static -std=c++17
+else
+    echo "ERROR: unhandled distro"
+fi
