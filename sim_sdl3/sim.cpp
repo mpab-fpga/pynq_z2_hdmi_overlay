@@ -12,6 +12,20 @@ const int HRES = 640;
 const int VRES = 480;
 int SCALING = 0;
 
+SDL_Window *sdl_window = NULL;
+SDL_Renderer *sdl_renderer = NULL;
+SDL_Texture *sdl_texture = NULL;
+
+int SDL_Exit(const char* msg, int error) {
+  if (error) SDL_Log("%s: %s", msg, SDL_GetError());
+
+  SDL_DestroyTexture(sdl_texture);
+  SDL_DestroyRenderer(sdl_renderer);
+  SDL_DestroyWindow(sdl_window);
+  SDL_Quit();
+  return error;
+}
+
 int main(int argc, char *argv[]) {
   Verilated::commandArgs(argc, argv);
 
@@ -28,32 +42,25 @@ int main(int argc, char *argv[]) {
   while ((((++SCALING + 1)* VRES)) <= screen_height);
   SDL_Log("Display: %d, Scaling: %d\n", display, SCALING);
 
-  SDL_Window *sdl_window = NULL;
-  SDL_Renderer *sdl_renderer = NULL;
-  SDL_Texture *sdl_texture = NULL;
-
   if (!SDL_CreateWindowAndRenderer("verilator_sdl3", HRES * SCALING,
                                    VRES * SCALING, 0, &sdl_window,
                                    &sdl_renderer)) {
-    SDL_Log("Couldn't create window/renderer: %s", SDL_GetError());
-    return SDL_APP_FAILURE;
+    return SDL_Exit("Couldn't create window/renderer", SDL_APP_FAILURE);
   }
 
   sdl_texture = SDL_CreateTexture(sdl_renderer, SDL_PIXELFORMAT_RGBA8888,
                                   SDL_TEXTUREACCESS_TARGET, HRES, VRES);
   if (!sdl_texture) {
-    SDL_Log("Texture creation failed: %s\n", SDL_GetError());
-    return SDL_APP_FAILURE;
+    return SDL_Exit("Texture creation failed", SDL_APP_FAILURE);
   }
 
   const Uint8 *keyb_state = (Uint8 *)SDL_GetKeyboardState(NULL);
 
   if (!keyb_state) {
-    SDL_Log("SDL_GetKeyboardState: %s\n", SDL_GetError());
-    return SDL_APP_FAILURE;
+    return SDL_Exit("SDL_GetKeyboardState failed", SDL_APP_FAILURE);
   }
 
-  SDL_Log("Simulation running. 'Q' or escape key to exit.\n\n");
+  SDL_Log("Simulation running. 'Q' or ESC to exit.\n\n");
 
   // initialize Verilog modules
   VideoHardware<HRES, VRES> sim;
@@ -88,10 +95,6 @@ int main(int argc, char *argv[]) {
       ((double)(end_ticks - start_ticks)) / SDL_GetPerformanceFrequency();
   double fps = (double)frame_count / duration;
   SDL_Log("Frames per second: %.1f\n", fps);
-
-  SDL_DestroyTexture(sdl_texture);
-  SDL_DestroyRenderer(sdl_renderer);
-  SDL_DestroyWindow(sdl_window);
-  SDL_Quit();
-  return 0;
+  
+  return SDL_Exit("", 0);
 }
