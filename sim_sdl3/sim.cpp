@@ -11,7 +11,7 @@
 const int HRES = 640;
 const int VRES = 480;
 int SCALING = 0;
-bool FULLSCREEN = FALSE;
+bool FULLSCREEN = false;
 
 SDL_Window *sdl_window = NULL;
 SDL_Renderer *sdl_renderer = NULL;
