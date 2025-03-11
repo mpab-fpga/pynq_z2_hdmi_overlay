@@ -11,6 +11,7 @@
 const int HRES = 640;
 const int VRES = 480;
 int SCALING = 0;
+bool FULLSCREEN = FALSE;
 
 SDL_Window *sdl_window = NULL;
 SDL_Renderer *sdl_renderer = NULL;
@@ -68,6 +69,8 @@ int main(int argc, char *argv[]) {
   uint64_t frame_count = 0;
   uint64_t start_ticks = SDL_GetPerformanceCounter();
 
+  int PREV_SDL_SCANCODE_S = 0;
+
   while (true) {
     // cycle the clock
     sim.cycle();
@@ -82,6 +85,11 @@ int main(int argc, char *argv[]) {
         break;
       if (keyb_state[SDL_SCANCODE_Q] || keyb_state[SDL_SCANCODE_ESCAPE])
         break; // quit if user presses 'Q' or 'escape'
+      if (keyb_state[SDL_SCANCODE_S] && !PREV_SDL_SCANCODE_S) {
+        FULLSCREEN = !FULLSCREEN;
+        SDL_SetWindowFullscreen(sdl_window, FULLSCREEN);
+      }
+      PREV_SDL_SCANCODE_S = keyb_state[SDL_SCANCODE_S];
 
       SDL_UpdateTexture(sdl_texture, NULL, sim.screenbuffer,
                         HRES * sizeof(VideoHardware<HRES, VRES>::Pixel));
