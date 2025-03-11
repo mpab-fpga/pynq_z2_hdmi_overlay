@@ -19,12 +19,14 @@ int main(int argc, char *argv[]) {
     return SDL_APP_FAILURE;
   }
 
-  auto pDM = SDL_GetDesktopDisplayMode(0);
-  if (!pDM) {
-    pDM = SDL_GetDesktopDisplayMode(1);
+  int display = -1;
+  auto pDM = SDL_GetDesktopDisplayMode((++display) + 1);
+  while (!pDM) {
+    pDM = SDL_GetDesktopDisplayMode((++display) + 1);
   }
   auto screen_height = pDM->h;
   while ((((++SCALING + 1)* VRES)) <= screen_height);
+  SDL_Log("Display: %d, Scaling: %d\n", display, SCALING);
 
   SDL_Window *sdl_window = NULL;
   SDL_Renderer *sdl_renderer = NULL;
@@ -91,5 +93,5 @@ int main(int argc, char *argv[]) {
   SDL_DestroyRenderer(sdl_renderer);
   SDL_DestroyWindow(sdl_window);
   SDL_Quit();
-  return SDL_APP_SUCCESS;
+  return 0;
 }
