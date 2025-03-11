@@ -9,7 +9,7 @@
 // screen dimensions
 const int HRES = 640;
 const int VRES = 480;
-const int FULLSCREEN = false;
+const int SCALING = 2;
 
 int main(int argc, char *argv[]) {
   Verilated::commandArgs(argc, argv);
@@ -25,13 +25,13 @@ int main(int argc, char *argv[]) {
 
   sdl_window =
       SDL_CreateWindow("verilator_sdl2", SDL_WINDOWPOS_CENTERED,
-                       SDL_WINDOWPOS_CENTERED, HRES, VRES, SDL_WINDOW_SHOWN);
+                       SDL_WINDOWPOS_CENTERED, HRES * SCALING, VRES * SCALING, SDL_WINDOW_SHOWN);
   if (!sdl_window) {
     SDL_Log("Window creation failed: %s\n", SDL_GetError());
     return 1;
   }
-  if (FULLSCREEN)
-    SDL_SetWindowFullscreen(sdl_window, SDL_WINDOW_FULLSCREEN);
+  // if (FULLSCREEN)
+  //   SDL_SetWindowFullscreen(sdl_window, SDL_WINDOW_FULLSCREEN);
 
   sdl_renderer = SDL_CreateRenderer(
       sdl_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
