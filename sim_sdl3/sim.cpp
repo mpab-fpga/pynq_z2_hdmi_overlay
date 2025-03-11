@@ -1,6 +1,7 @@
 #define NO_STDIO_REDIRECT
 
 #include <SDL3/SDL.h>
+#include <SDL3/SDL_video.h>
 #include <stdio.h>
 #include <verilated.h>
 
@@ -9,21 +10,28 @@
 // screen dimensions
 const int HRES = 640;
 const int VRES = 480;
-const int SCALING = 2;
+int SCALING = 0;
 
 int main(int argc, char *argv[]) {
   Verilated::commandArgs(argc, argv);
 
-  if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-    SDL_Log("SDL init failed.\n");
-    return 1;
+  if (!SDL_Init(SDL_INIT_VIDEO)) {
+    return SDL_APP_FAILURE;
   }
+
+  auto pDM = SDL_GetDesktopDisplayMode(0);
+  if (!pDM) {
+    pDM = SDL_GetDesktopDisplayMode(1);
+  }
+  auto screen_height = pDM->h;
+  while ((((++SCALING + 1)* VRES)) <= screen_height);
 
   SDL_Window *sdl_window = NULL;
   SDL_Renderer *sdl_renderer = NULL;
   SDL_Texture *sdl_texture = NULL;
 
-  if (!SDL_CreateWindowAndRenderer("verilator_sdl3", HRES * SCALING, VRES * SCALING, 0, &sdl_window,
+  if (!SDL_CreateWindowAndRenderer("verilator_sdl3", HRES * SCALING,
+                                   VRES * SCALING, 0, &sdl_window,
                                    &sdl_renderer)) {
     SDL_Log("Couldn't create window/renderer: %s", SDL_GetError());
     return SDL_APP_FAILURE;
@@ -83,5 +91,5 @@ int main(int argc, char *argv[]) {
   SDL_DestroyRenderer(sdl_renderer);
   SDL_DestroyWindow(sdl_window);
   SDL_Quit();
-  return 0;
+  return SDL_APP_SUCCESS;
 }
