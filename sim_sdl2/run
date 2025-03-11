@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+rm -f ./obj_dir/sim
+rm -f ./obj_dir/sim.exe
+make
+cd ../hardware/src
+[ -f ../../sim_sdl2/obj_dir/sim ] && ../../sim_sdl2/obj_dir/sim && exit
+[ -f ../../sim_sdl2/obj_dir/sim.exe ] && ../../sim_sdl2/obj_dir/sim.exe && exit

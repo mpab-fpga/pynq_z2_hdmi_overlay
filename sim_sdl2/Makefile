@@ -1,19 +1,17 @@
 VFLAGS = -O3 --x-assign fast --x-initial fast --noassert
 SDL_CFLAGS = `sdl2-config --cflags`
 SDL_LDFLAGS = `sdl2-config --libs`
-SRC_LIBS += ../hardware/src
-
-sim: sim.exe
+SRC_LIBS = ../hardware/src
 
 %.exe: %.mk
 	make -C ./obj_dir -f V$<
 
-%.mk: %.sv
+%.mk: ../sim_common/%.sv
 	verilator ${VFLAGS} -I${SRC_LIBS} \
-	    -cc $< --exe $(basename $@)_sdl.cpp -o $(basename $@)_sdl \
-		-CFLAGS "${SDL_CFLAGS}" -LDFLAGS "${SDL_LDFLAGS} -mconsole"
+	    -cc $< --exe $(basename $@).cpp -o $(basename $@) \
+		-CFLAGS "${SDL_CFLAGS}" -LDFLAGS "${SDL_LDFLAGS}"
 
-all: sim
+all: sim.exe
 
 clean:
 	rm -rf ./obj_dir
