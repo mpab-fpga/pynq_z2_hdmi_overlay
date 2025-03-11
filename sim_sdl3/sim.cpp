@@ -5,17 +5,12 @@
 #include <stdio.h>
 #include <verilated.h>
 
+#include "video_hardware.h"
+
 // screen dimensions
 const int HRES = 640;
 const int VRES = 480;
 const int FULLSCREEN = false;
-
-typedef struct Pixel { // for SDL texture
-  uint8_t a;           // transparency
-  uint8_t b;           // blue
-  uint8_t g;           // green
-  uint8_t r;           // red
-} Pixel;
 
 int main(int argc, char *argv[]) {
   Verilated::commandArgs(argc, argv);
@@ -25,7 +20,6 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-  Pixel screenbuffer[HRES * VRES];
   SDL_Window *sdl_window = NULL;
   SDL_Renderer *sdl_renderer = NULL;
   SDL_Texture *sdl_texture = NULL;
@@ -53,42 +47,19 @@ int main(int argc, char *argv[]) {
   SDL_Log("Simulation running. 'Q' or escape key to exit.\n\n");
 
   // initialize Verilog modules
-  Vsim sim;
-
-  // TODO: implement reset
-  //  reset
-  //  sim->rst_pix = 1;
-  //  sim->video_clk_pix = 0;
-  //  sim->eval();
-  //  sim->video_clk_pix = 1;
-  //  sim->eval();
-  //  sim->rst_pix = 0;
-  //  sim->video_clk_pix = 0;
-  //  sim->eval();
+  VideoHardware<HRES, VRES> sim;
 
   uint64_t frame_count = 0;
   uint64_t start_ticks = SDL_GetPerformanceCounter();
 
   while (true) {
     // cycle the clock
-    sim.video_clk_pix = 1;
-    sim.eval();
-    sim.video_clk_pix = 0;
-    sim.eval();
-
-    // update pixel inside draw window
-    if (sim.video_enable) {
-      Pixel *p = &screenbuffer[sim.sy * HRES + sim.sx];
-      p->a = 0xFF; // transparency
-      p->b = sim.blue;
-      p->g = sim.green;
-      p->r = sim.red;
-    }
+    sim.cycle();
 
     // update texture outside draw window
     // if (sim.vsync)
     // the above should work, but SDL gets stuck here, so check coords instead
-    if (sim.frame_start) {
+    if (sim.frame_start()) {
       // check for quit event
       SDL_Event e;
       if (SDL_PollEvent(&e) && e.type == SDL_EVENT_QUIT)
@@ -96,7 +67,8 @@ int main(int argc, char *argv[]) {
       if (keyb_state[SDL_SCANCODE_Q] || keyb_state[SDL_SCANCODE_ESCAPE])
         break; // quit if user presses 'Q' or 'escape'
 
-      SDL_UpdateTexture(sdl_texture, NULL, screenbuffer, HRES * sizeof(Pixel));
+      SDL_UpdateTexture(sdl_texture, NULL, sim.screenbuffer,
+                        HRES * sizeof(VideoHardware<HRES, VRES>::Pixel));
       SDL_RenderTexture(sdl_renderer, sdl_texture, NULL, NULL);
       SDL_RenderPresent(sdl_renderer);
       frame_count++;
@@ -107,8 +79,6 @@ int main(int argc, char *argv[]) {
       ((double)(end_ticks - start_ticks)) / SDL_GetPerformanceFrequency();
   double fps = (double)frame_count / duration;
   SDL_Log("Frames per second: %.1f\n", fps);
-
-  sim.final(); // simulation done
 
   SDL_DestroyTexture(sdl_texture);
   SDL_DestroyRenderer(sdl_renderer);

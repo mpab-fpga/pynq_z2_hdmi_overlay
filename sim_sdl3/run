@@ -1,7 +1,10 @@
 #!/usr/bin/env sh
-rm -f ./obj_dir/sim
-rm -f ./obj_dir/sim.exe
+
+OBJ_DIR="$PWD/obj_dir"
+rm -f "$OBJ_DIR/sim"
+rm -f "$OBJ_DIR/sim.exe"
 make
 cd ../hardware/src
-[ -f ../../sim_sdl3/obj_dir/sim ] && ../../sim_sdl3/obj_dir/sim && exit
-[ -f ../../sim_sdl3/obj_dir/sim.exe ] && ../../sim_sdl3/obj_dir/sim.exe && exit
+PATH="$SDL3_DIR/bin:$PATH"
+[ -f $OBJ_DIR/sim ] && $OBJ_DIR/sim && exit
+[ -f $OBJ_DIR/sim.exe ] && $OBJ_DIR/sim.exe && exit
