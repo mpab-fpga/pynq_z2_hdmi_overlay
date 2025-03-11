@@ -5,6 +5,7 @@ rm -f "$OBJ_DIR/sim"
 rm -f "$OBJ_DIR/sim.exe"
 make
 cd ../hardware/src
-PATH="$SDL3_DIR/bin:$PATH"
+export PATH="$SDL3_DIR/bin:$SDL3_DIR/lib:$PATH"
+export LD_LIBRARY_PATH="$SDL3_DIR/bin:$SDL3_DIR/lib:$LD_LIBRARY_PATH"
 [ -f $OBJ_DIR/sim ] && $OBJ_DIR/sim && exit
 [ -f $OBJ_DIR/sim.exe ] && $OBJ_DIR/sim.exe && exit
