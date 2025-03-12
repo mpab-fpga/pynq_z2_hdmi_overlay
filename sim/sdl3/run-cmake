@@ -22,10 +22,12 @@ pinf () {
 DISTRO_NAME=$(distro-name)
 BUILD_ENVIRONMENT=build-$DISTRO_NAME
 
+echo
+
 OBJ_DIR="$PWD/$BUILD_ENVIRONMENT"
 rm -f "$OBJ_DIR/sim"
 rm -f "$OBJ_DIR/sim.exe"
-# required for macOS?
+# required for macOS - moved to CMakeLists.txt
 # export LDFLAGS="$LDFLAGS -undefined dynamic_lookup"
 cmake -GNinja -S . -B $BUILD_ENVIRONMENT -DCMAKE_PREFIX_PATH="$SDL3_DIR"
 cmake --build $BUILD_ENVIRONMENT

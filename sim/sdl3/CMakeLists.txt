@@ -10,6 +10,9 @@ project(sim)
 
 add_executable(${PROJECT_NAME} sim.cpp)
 target_include_directories(${PROJECT_NAME} PRIVATE ../shared/)
+if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    target_link_libraries(${PROJECT_NAME} "-undefined dynamic_lookup")
+endif()
 
 # verilator
 find_package(verilator HINTS $ENV{VERILATOR_ROOT})
