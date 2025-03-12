@@ -8,8 +8,7 @@
 **/denv-*
 
 # build artifacts
-**/build-*
-**/build/
+**/build*/
 
 # Xilinx/Vivado/Vitis
 *.cache

@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
   SDL_Log("VideoHardware running. 'Q' or escape key to exit.\n\n");
 
   // initialize Verilog modules
-  VideoHardware<HRES, VRES> sim;
+  VideoHardware::VideoHardware<HRES, VRES> sim;
 
   uint64_t frame_count = 0;
   uint64_t start_ticks = SDL_GetPerformanceCounter();
@@ -75,7 +75,7 @@ int main(int argc, char *argv[]) {
         break; // quit if user presses 'Q' or 'escape'
 
       SDL_UpdateTexture(sdl_texture, NULL, sim.screenbuffer,
-                        HRES * sizeof(VideoHardware<HRES, VRES>::Pixel));
+                        HRES * sizeof(VideoHardware::Pixel));
       SDL_RenderCopy(sdl_renderer, sdl_texture, NULL, NULL);
       SDL_RenderPresent(sdl_renderer);
       frame_count++;

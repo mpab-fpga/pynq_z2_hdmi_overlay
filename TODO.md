@@ -7,6 +7,8 @@
   - temporary hack in create-vitis.tcl, requires cleanup/rewrite
 - create project from template
 - merge changes back into template
+- implement sdl2 and sdl3 simulations
+- support cmake build (sdl3)
 
 ## Doing
 
