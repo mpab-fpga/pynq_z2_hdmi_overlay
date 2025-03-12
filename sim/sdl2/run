@@ -4,7 +4,7 @@ OBJ_DIR="$PWD/obj_dir"
 rm -f "$OBJ_DIR/sim"
 rm -f "$OBJ_DIR/sim.exe"
 make
-cd ../hardware/src
+cd ../../hardware/src
 export PATH="$SDL3_DIR/bin:$SDL3_DIR/lib:$PATH"
 export LD_LIBRARY_PATH="$SDL3_DIR/bin:$SDL3_DIR/lib:$LD_LIBRARY_PATH"
 export DYLD_LIBRARY_PATH="$SDL3_DIR/bin:$SDL3_DIR/lib:$DYLD_LIBRARY_PATH"

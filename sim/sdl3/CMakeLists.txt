@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 project(sim)
 
-add_executable(${PROJECT_NAME} main.cpp)
+add_executable(${PROJECT_NAME} sim.cpp)
 target_include_directories(${PROJECT_NAME} PRIVATE ../shared/)
 
 # verilator
@@ -17,7 +17,7 @@ add_library(dut)
 verilate(dut
     SOURCES ../shared/sim.sv
     INCLUDE_DIRS ../../hardware/src
-    -O3 --x-assign fast --x-initial fast --noassert
+    VERILATOR_ARGS -O3 --x-assign fast --x-initial fast --noassert
 )
 
 # SDL3

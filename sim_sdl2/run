@@ -1,8 +1,0 @@
-#!/usr/bin/env sh
-OBJ_DIR="$PWD/obj_dir"
-rm -f "$OBJ_DIR/sim"
-rm -f "$OBJ_DIR/sim.exe"
-make
-cd ../hardware/src
-[ -f $OBJ_DIR/sim ] && $OBJ_DIR/sim && exit
-[ -f $OBJ_DIR/sim.exe ] && $OBJ_DIR/sim.exe && exit

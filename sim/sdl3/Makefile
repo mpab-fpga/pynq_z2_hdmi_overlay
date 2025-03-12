@@ -1,19 +1,19 @@
 VFLAGS = -O3 --x-assign fast --x-initial fast --noassert
-SDL_CFLAGS = `sdl2-config --cflags`
+SDL_CFLAGS = "-I${SDL3_DIR}/include"
 ifeq ($(OS), Windows_NT)
-	SDL_LDFLAGS = `sdl2-config --libs` -mconsole
+	SDL_LDFLAGS = -L${SDL3_DIR}/lib -lSDL3 -mconsole
 else
-	SDL_LDFLAGS = `sdl2-config --libs`
+	SDL_LDFLAGS = -L${SDL3_DIR}/lib -lSDL3
 endif
-SRC_LIBS = ../hardware/src
-SIM_COMMON = ../../sim_common/
+SRC_LIBS = ../../hardware/src
+SIM_COMMON = ../../shared
 
 build: sim.exe
 
 %.exe: %.mk
 	make -C ./obj_dir -f V$<
 
-%.mk: ../sim_common/%.sv
+%.mk: ../shared/%.sv
 	verilator ${VFLAGS} -I${SRC_LIBS} \
 	    -cc $< --exe $(basename $@).cpp -o $(basename $@) \
 		-CFLAGS -I${SIM_COMMON} \
