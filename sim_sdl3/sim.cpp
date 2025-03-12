@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
   Verilated::commandArgs(argc, argv);
 
   if (!SDL_Init(SDL_INIT_VIDEO)) {
-    return SDL_APP_FAILURE;
+    return SDL_Exit("SDL_Init failure", SDL_APP_FAILURE);
   }
 
   int display = -1;
@@ -61,7 +61,7 @@ int main(int argc, char *argv[]) {
     return SDL_Exit("SDL_GetKeyboardState failed", SDL_APP_FAILURE);
   }
 
-  SDL_Log("Simulation running. 'Q' or ESC to exit.\n\n");
+  SDL_Log("Simulation running. 'S' toggle full screen/window. 'Q' or ESC to exit.\n\n");
 
   // initialize Verilog modules
   VideoHardware<HRES, VRES> sim;
