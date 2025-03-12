@@ -9,6 +9,7 @@
 
 # build artifacts
 **/build-*
+**/build/
 
 # Xilinx/Vivado/Vitis
 *.cache

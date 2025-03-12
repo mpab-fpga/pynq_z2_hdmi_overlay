@@ -20,9 +20,7 @@ pinf () {
 [ ! -d "$SDL3_DIR" ] && perr "$SDL3_DIR is not a folder\n" && exit
 
 DISTRO_NAME=$(distro-name)
-BUILD_ENVIRONMENT=build-$DISTRO_NAME
-
-echo
+BUILD_ENVIRONMENT=build
 
 OBJ_DIR="$PWD/$BUILD_ENVIRONMENT"
 rm -f "$OBJ_DIR/sim"
