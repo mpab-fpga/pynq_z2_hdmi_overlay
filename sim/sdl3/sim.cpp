@@ -14,8 +14,9 @@ SDL_Window *sdl_window = NULL;
 SDL_Renderer *sdl_renderer = NULL;
 SDL_Texture *sdl_texture = NULL;
 
-int SDL_Exit(const char* msg, int error) {
-  if (error) SDL_Log("%s: %s", msg, SDL_GetError());
+int SDL_Exit(const char *msg, int error) {
+  if (error)
+    SDL_Log("%s: %s", msg, SDL_GetError());
 
   SDL_DestroyTexture(sdl_texture);
   SDL_DestroyRenderer(sdl_renderer);
@@ -37,17 +38,20 @@ int main(int argc, char *argv[]) {
     pDM = SDL_GetDesktopDisplayMode((++display) + 1);
   }
   auto screen_height = pDM->h;
-  while ((((++SCALING + 1)* VideoHardware::VRES)) <= screen_height);
-  SDL_Log("Display: %d, Scaling: %d, Screen(%d, %d)\n", display, SCALING, VideoHardware::HRES * SCALING, VideoHardware::VRES * SCALING);
+  while ((((++SCALING + 1) * VideoHardware::VRES)) <= screen_height)
+    ;
+  SDL_Log("Display: %d, Scaling: %d, Screen(%d, %d)\n", display, SCALING,
+          VideoHardware::HRES * SCALING, VideoHardware::VRES * SCALING);
 
-  if (!SDL_CreateWindowAndRenderer("verilator_sdl3", VideoHardware::HRES * SCALING,
-    VideoHardware::VRES * SCALING, 0, &sdl_window,
-                                   &sdl_renderer)) {
+  if (!SDL_CreateWindowAndRenderer(
+          "verilator_sdl3", VideoHardware::HRES * SCALING,
+          VideoHardware::VRES * SCALING, 0, &sdl_window, &sdl_renderer)) {
     return SDL_Exit("Couldn't create window/renderer", SDL_APP_FAILURE);
   }
 
   sdl_texture = SDL_CreateTexture(sdl_renderer, SDL_PIXELFORMAT_RGBA8888,
-                                  SDL_TEXTUREACCESS_TARGET, VideoHardware::HRES, VideoHardware::VRES);
+                                  SDL_TEXTUREACCESS_TARGET, VideoHardware::HRES,
+                                  VideoHardware::VRES);
   if (!sdl_texture) {
     return SDL_Exit("Texture creation failed", SDL_APP_FAILURE);
   }
@@ -58,7 +62,8 @@ int main(int argc, char *argv[]) {
     return SDL_Exit("SDL_GetKeyboardState failed", SDL_APP_FAILURE);
   }
 
-  SDL_Log("Simulation running. 'S' toggle full screen/window. 'Q' or ESC to exit.\n\n");
+  SDL_Log("Simulation running. 'S' toggle full screen/window. 'Q' or ESC to "
+          "exit.\n\n");
 
   // initialize Verilog modules
   VideoHardware::VideoHardware sim;
@@ -89,7 +94,7 @@ int main(int argc, char *argv[]) {
       PREV_SDL_SCANCODE_S = keyb_state[SDL_SCANCODE_S];
 
       SDL_UpdateTexture(sdl_texture, NULL, sim.screenbuffer,
-        VideoHardware::HRES * sizeof(VideoHardware::Pixel));
+                        VideoHardware::HRES * sizeof(VideoHardware::Pixel));
       SDL_RenderTexture(sdl_renderer, sdl_texture, NULL, NULL);
       SDL_RenderPresent(sdl_renderer);
       frame_count++;
@@ -100,6 +105,6 @@ int main(int argc, char *argv[]) {
       ((double)(end_ticks - start_ticks)) / SDL_GetPerformanceFrequency();
   double fps = (double)frame_count / duration;
   SDL_Log("Frames per second: %.1f\n", fps);
-  
+
   return SDL_Exit("", 0);
 }

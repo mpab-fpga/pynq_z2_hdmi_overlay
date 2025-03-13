@@ -22,7 +22,8 @@ int main(int argc, char *argv[]) {
 
   sdl_window =
       SDL_CreateWindow("verilator_sdl2", SDL_WINDOWPOS_CENTERED,
-                       SDL_WINDOWPOS_CENTERED, VideoHardware::HRES * SCALING, VideoHardware::VRES * SCALING, SDL_WINDOW_SHOWN);
+                       SDL_WINDOWPOS_CENTERED, VideoHardware::HRES * SCALING,
+                       VideoHardware::VRES * SCALING, SDL_WINDOW_SHOWN);
   if (!sdl_window) {
     SDL_Log("Window creation failed: %s\n", SDL_GetError());
     return 1;
@@ -38,7 +39,8 @@ int main(int argc, char *argv[]) {
   }
 
   sdl_texture = SDL_CreateTexture(sdl_renderer, SDL_PIXELFORMAT_RGBA8888,
-                                  SDL_TEXTUREACCESS_TARGET, VideoHardware::HRES, VideoHardware::VRES);
+                                  SDL_TEXTUREACCESS_TARGET, VideoHardware::HRES,
+                                  VideoHardware::VRES);
   if (!sdl_texture) {
     SDL_Log("Texture creation failed: %s\n", SDL_GetError());
     return 1;
@@ -72,7 +74,7 @@ int main(int argc, char *argv[]) {
         break; // quit if user presses 'Q' or 'escape'
 
       SDL_UpdateTexture(sdl_texture, NULL, sim.screenbuffer,
-        VideoHardware::HRES * sizeof(VideoHardware::Pixel));
+                        VideoHardware::HRES * sizeof(VideoHardware::Pixel));
       SDL_RenderCopy(sdl_renderer, sdl_texture, NULL, NULL);
       SDL_RenderPresent(sdl_renderer);
       frame_count++;

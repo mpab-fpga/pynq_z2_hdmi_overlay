@@ -10,8 +10,8 @@ typedef struct { // for SDL texture
 } Pixel;
 
 // hardware currently restricted to 640x480
-const unsigned int HRES=640;
-const unsigned int VRES=480;
+const unsigned int HRES = 640;
+const unsigned int VRES = 480;
 
 struct VideoHardware {
   Pixel screenbuffer[HRES * VRES];
