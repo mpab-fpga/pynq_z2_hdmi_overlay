@@ -7,9 +7,6 @@
 
 #include "video_hardware.h"
 
-// screen dimensions
-const int HRES = 640;
-const int VRES = 480;
 int SCALING = 0;
 bool FULLSCREEN = false;
 
@@ -40,17 +37,17 @@ int main(int argc, char *argv[]) {
     pDM = SDL_GetDesktopDisplayMode((++display) + 1);
   }
   auto screen_height = pDM->h;
-  while ((((++SCALING + 1)* VRES)) <= screen_height);
-  SDL_Log("Display: %d, Scaling: %d\n", display, SCALING);
+  while ((((++SCALING + 1)* VideoHardware::VRES)) <= screen_height);
+  SDL_Log("Display: %d, Scaling: %d, Screen(%d, %d)\n", display, SCALING, VideoHardware::HRES * SCALING, VideoHardware::VRES * SCALING);
 
-  if (!SDL_CreateWindowAndRenderer("verilator_sdl3", HRES * SCALING,
-                                   VRES * SCALING, 0, &sdl_window,
+  if (!SDL_CreateWindowAndRenderer("verilator_sdl3", VideoHardware::HRES * SCALING,
+    VideoHardware::VRES * SCALING, 0, &sdl_window,
                                    &sdl_renderer)) {
     return SDL_Exit("Couldn't create window/renderer", SDL_APP_FAILURE);
   }
 
   sdl_texture = SDL_CreateTexture(sdl_renderer, SDL_PIXELFORMAT_RGBA8888,
-                                  SDL_TEXTUREACCESS_TARGET, HRES, VRES);
+                                  SDL_TEXTUREACCESS_TARGET, VideoHardware::HRES, VideoHardware::VRES);
   if (!sdl_texture) {
     return SDL_Exit("Texture creation failed", SDL_APP_FAILURE);
   }
@@ -64,7 +61,7 @@ int main(int argc, char *argv[]) {
   SDL_Log("Simulation running. 'S' toggle full screen/window. 'Q' or ESC to exit.\n\n");
 
   // initialize Verilog modules
-  VideoHardware::VideoHardware<HRES, VRES> sim;
+  VideoHardware::VideoHardware sim;
 
   uint64_t frame_count = 0;
   uint64_t start_ticks = SDL_GetPerformanceCounter();
@@ -78,7 +75,7 @@ int main(int argc, char *argv[]) {
     // update texture outside draw window
     // if (sim.vsync)
     // the above should work, but SDL gets stuck here, so check coords instead
-    if (sim.frame_start()) {
+    if (sim.hw.frame_start) {
       // check for quit event
       SDL_Event e;
       if (SDL_PollEvent(&e) && e.type == SDL_EVENT_QUIT)
@@ -92,7 +89,7 @@ int main(int argc, char *argv[]) {
       PREV_SDL_SCANCODE_S = keyb_state[SDL_SCANCODE_S];
 
       SDL_UpdateTexture(sdl_texture, NULL, sim.screenbuffer,
-                        HRES * sizeof(VideoHardware::Pixel));
+        VideoHardware::HRES * sizeof(VideoHardware::Pixel));
       SDL_RenderTexture(sdl_renderer, sdl_texture, NULL, NULL);
       SDL_RenderPresent(sdl_renderer);
       frame_count++;

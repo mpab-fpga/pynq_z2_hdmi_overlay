@@ -6,9 +6,6 @@
 
 #include "video_hardware.h"
 
-// screen dimensions
-const int HRES = 640;
-const int VRES = 480;
 const int SCALING = 1;
 
 int main(int argc, char *argv[]) {
@@ -25,7 +22,7 @@ int main(int argc, char *argv[]) {
 
   sdl_window =
       SDL_CreateWindow("verilator_sdl2", SDL_WINDOWPOS_CENTERED,
-                       SDL_WINDOWPOS_CENTERED, HRES * SCALING, VRES * SCALING, SDL_WINDOW_SHOWN);
+                       SDL_WINDOWPOS_CENTERED, VideoHardware::HRES * SCALING, VideoHardware::VRES * SCALING, SDL_WINDOW_SHOWN);
   if (!sdl_window) {
     SDL_Log("Window creation failed: %s\n", SDL_GetError());
     return 1;
@@ -41,7 +38,7 @@ int main(int argc, char *argv[]) {
   }
 
   sdl_texture = SDL_CreateTexture(sdl_renderer, SDL_PIXELFORMAT_RGBA8888,
-                                  SDL_TEXTUREACCESS_TARGET, HRES, VRES);
+                                  SDL_TEXTUREACCESS_TARGET, VideoHardware::HRES, VideoHardware::VRES);
   if (!sdl_texture) {
     SDL_Log("Texture creation failed: %s\n", SDL_GetError());
     return 1;
@@ -54,7 +51,7 @@ int main(int argc, char *argv[]) {
   SDL_Log("VideoHardware running. 'Q' or escape key to exit.\n\n");
 
   // initialize Verilog modules
-  VideoHardware::VideoHardware<HRES, VRES> sim;
+  VideoHardware::VideoHardware sim;
 
   uint64_t frame_count = 0;
   uint64_t start_ticks = SDL_GetPerformanceCounter();
@@ -66,7 +63,7 @@ int main(int argc, char *argv[]) {
     // update texture outside draw window
     // if (sim->vsync)
     // the above should work, but SDL gets stuck here, so check coords instead
-    if (sim.frame_start()) {
+    if (sim.hw.frame_start) {
       // check for quit event
       SDL_Event e;
       if (SDL_PollEvent(&e) && e.type == SDL_QUIT)
@@ -75,7 +72,7 @@ int main(int argc, char *argv[]) {
         break; // quit if user presses 'Q' or 'escape'
 
       SDL_UpdateTexture(sdl_texture, NULL, sim.screenbuffer,
-                        HRES * sizeof(VideoHardware::Pixel));
+        VideoHardware::HRES * sizeof(VideoHardware::Pixel));
       SDL_RenderCopy(sdl_renderer, sdl_texture, NULL, NULL);
       SDL_RenderPresent(sdl_renderer);
       frame_count++;
