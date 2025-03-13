@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+
+BUILD_ENVIRONMENT=build
+
+OBJ_DIR="$PWD/$BUILD_ENVIRONMENT"
+# required for macOS - moved to CMakeLists.txt
+# export LDFLAGS="$LDFLAGS -undefined dynamic_lookup"
+cmake -GNinja -S . -B $BUILD_ENVIRONMENT -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$SDL3_DIR"
+cmake --build $BUILD_ENVIRONMENT
