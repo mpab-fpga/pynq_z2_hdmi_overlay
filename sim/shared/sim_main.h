@@ -7,7 +7,7 @@
 
 namespace sim {
 
-static int _main(int argc, char *argv[]) {
+static inline int _main(int argc, char *argv[]) {
   Verilated::commandArgs(argc, argv);
 
   auto sdl = _sdl::SDL();

@@ -1,3 +1,5 @@
+#pragma once
+
 #if !defined(_SDL_USE_VERSION)
 #error "you must set _SDL_USE_VERSION before including this file"
 #endif
