@@ -9,7 +9,7 @@
 // screen dimensions
 const int HRES = 640;
 const int VRES = 480;
-const int SCALING = 2;
+const int SCALING = 1;
 
 int main(int argc, char *argv[]) {
   Verilated::commandArgs(argc, argv);

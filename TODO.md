@@ -8,7 +8,7 @@
 - create project from template
 - merge changes back into template
 - implement sdl2 and sdl3 simulations
-- support cmake build (sdl3)
+- support cmake build (SDL2, SDL3)
 
 ## Doing
 
